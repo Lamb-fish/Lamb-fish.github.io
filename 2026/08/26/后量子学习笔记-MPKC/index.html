@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>后量子密码-MPKC | Lamb</title><meta name="author" content="Lamb"><meta name="copyright" content="Lamb"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、简介多元公钥密码系统是后量子密码系统，其安全性依赖于解决有限域上多元多项式方程组的NP难问题。 多元公钥密码学（MPKC）是一系列密码系统，设计用于替代传统方案如RSA和DSA，尤其是在后量子时代。MPKC中的公钥是一组多元多项式，通常是二次的，定义在有限域上。MPKC的安全性基于解决这些系统的NP难度，使其能抵抗经典和量子攻击 优点：加解密、签名验证速度快，缺点：密钥存储的开销很高 二、基本">
+<meta property="og:type" content="article">
+<meta property="og:title" content="后量子密码-MPKC">
+<meta property="og:url" content="http://example.com/2026/08/26/%E5%90%8E%E9%87%8F%E5%AD%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-MPKC/index.html">
+<meta property="og:site_name" content="Lamb">
+<meta property="og:description" content="一、简介多元公钥密码系统是后量子密码系统，其安全性依赖于解决有限域上多元多项式方程组的NP难问题。 多元公钥密码学（MPKC）是一系列密码系统，设计用于替代传统方案如RSA和DSA，尤其是在后量子时代。MPKC中的公钥是一组多元多项式，通常是二次的，定义在有限域上。MPKC的安全性基于解决这些系统的NP难度，使其能抵抗经典和量子攻击 优点：加解密、签名验证速度快，缺点：密钥存储的开销很高 二、基本">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/avatar.jpg">
+<meta property="article:published_time" content="2026-08-26T13:25:07.000Z">
+<meta property="article:modified_time" content="2026-09-08T16:13:36.686Z">
+<meta property="article:author" content="Lamb">
+<meta property="article:tag" content="Crypto">
+<meta property="article:tag" content="后量子密码">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/avatar.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "后量子密码-MPKC",
+  "url": "http://example.com/2026/08/26/%E5%90%8E%E9%87%8F%E5%AD%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-MPKC/",
+  "image": "http://example.com/img/avatar.jpg",
+  "datePublished": "2026-08-26T13:25:07.000Z",
+  "dateModified": "2026-09-08T16:13:36.686Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lamb",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/08/26/%E5%90%8E%E9%87%8F%E5%AD%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-MPKC/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '后量子密码-MPKC',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lamb</span></a><a class="nav-page-title" href="/"><span class="site-name">后量子密码-MPKC</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">后量子密码-MPKC</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-08-26T13:25:07.000Z" title="发表于 2026-08-26 21:25:07">2026-08-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-08T16:13:36.686Z" title="更新于 2026-09-09 00:13:36">2026-09-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Crypto/">Crypto</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Crypto/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h1><p>多元公钥密码系统是后量子密码系统，其安全性依赖于解决有限域上多元多项式方程组的NP难问题。</p>
+<p>多元公钥密码学（MPKC）是一系列密码系统，设计用于替代传统方案如RSA和DSA，尤其是在后量子时代。MPKC中的公钥是一组多元多项式，通常是二次的，定义在有限域上。MPKC的安全性基于解决这些系统的NP难度，使其能抵抗经典和量子攻击</p>
+<p>优点：加解密、签名验证速度快，缺点：密钥存储的开销很高</p>
+<h1 id="二、基本概念"><a href="#二、基本概念" class="headerlink" title="二、基本概念"></a>二、基本概念</h1><h2 id="1、有限域上"><a href="#1、有限域上" class="headerlink" title="1、有限域上"></a>1、有限域上</h2><p>$$设\mathbb F&#x3D;\mathbb F_q是具有q个元素的有限域，常见的有\mathbb F_2,\mathbb F_{2^8},\mathbb F_{16},\mathbb F_{256}$$</p>
+<h2 id="2、多元二次方程MQ"><a href="#2、多元二次方程MQ" class="headerlink" title="2、多元二次方程MQ"></a>2、多元二次方程MQ</h2><p>$$设有n个变量x_1,x_2,…x_n，m个二元多项式P_1,P_2,…P_m$$</p>
+<p>$$多项式表示为：P_i(x)&#x3D;\sum_{j \leq k} R_{ijk}x_jx_k+\sum_j Q_{ij}x_j^2+\sum_jP_{ij}x_j$$</p>
+<p>$$因此系统可表示为：P:\mathbb F_q^n \rightarrow \mathbb F_q^m，其中P(x)&#x3D;(P_1(x),P_2(x),…P_m(x))$$</p>
+<p><strong>MQ****问题：</strong></p>
+<p>$$已知y&#x3D;P(x)，求x \Leftrightarrow 求\begin {cases} P_1(x)&#x3D;y_1 \ P_2(x)&#x3D;y_2 \ \vdots\ P_m(x)&#x3D;y_m \end {cases}$$</p>
+<h2 id="3、中心映射"><a href="#3、中心映射" class="headerlink" title="3、中心映射"></a>3、中心映射</h2><p>$$本质上是一组多元多项式：F&#x3D;(F_1,F_2,…,F_m$$</p>
+<h2 id="4、仿射变换"><a href="#4、仿射变换" class="headerlink" title="4、仿射变换"></a>4、仿射变换</h2><p>为了隐藏F的特殊结构，通常再加入两个秘密可逆仿射变换：</p>
+<p>$$T：\mathbb F_q^n \rightarrow F_q^n和S:\mathbb F_q^m \rightarrow F_q^m$$</p>
+<p>最终公钥为：P&#x3D;S∘F∘T   P(x)&#x3D;S(F(T(x)))</p>
+<h1 id="三、原理"><a href="#三、原理" class="headerlink" title="三、原理"></a>三、原理</h1><p>流程：$$x \rightarrow^Tu \rightarrow^Fv\rightarrow^Sy$$</p>
+<p>先设计一个容易求逆的中心映射：F，然后随机生成两个可逆仿射映射：S、T，构造P&#x3D;S∘F∘T  P(x)&#x3D;S(F(T(x)))</p>
+<p>公钥：P   私钥：S,F,T</p>
+<p>二次映射经过仿射变换后仍为二次映射，故而既可隐藏结构又不会改变公钥形式</p>
+<h1 id="四、主要类型"><a href="#四、主要类型" class="headerlink" title="四、主要类型"></a>四、主要类型</h1><h2 id="1、Oil-Vinegar"><a href="#1、Oil-Vinegar" class="headerlink" title="1、Oil-Vinegar"></a>1、Oil-Vinegar</h2><p><strong>UOV</strong> Unbalanced Oil and Vinegar:</p>
+<p>将变量分为：Vinegar variables和Vinegar variables</p>
+<p>$$方程中只有v_iv_j和v_io_j没有o_io_j$$</p>
+<p>$$先随机确定Vinega r:v_1,v_2,…v_n后所有关于oil的方程都会变成线性的，通过高斯校园直接求解oil$$</p>
+<h2 id="2、Rainbow"><a href="#2、Rainbow" class="headerlink" title="2、Rainbow"></a>2、Rainbow</h2><p>Baby tonight come with me  你的爱意像rainbow</p>
+<p>多层UOV：$$V_1\rightarrow O_1 \rightarrow O_2 \rightarrow…$$</p>
+<p>第一层解出O1后，变量又可作为下一层已知变量，解O2…逐层完成签名</p>
+<h2 id="3、HFE"><a href="#3、HFE" class="headerlink" title="3、HFE"></a>3、HFE</h2><p>Hidden Field Equations 隐藏域方程</p>
+<p>$$利用扩域\mathbb F_{q^n}构造一个特殊的单变量多项式$$</p>
+<p>$$F(x)&#x3D;\sum a_{ij}x^{q^i+q^j}+\sum b_ix^{q^i}+c$$</p>
+<p>HFE有很多变种：HFEv、HFE-、Quartz、GeMSS</p>
+<h1 id="五、缺陷与攻击"><a href="#五、缺陷与攻击" class="headerlink" title="五、缺陷与攻击"></a>五、缺陷与攻击</h1><h2 id="1、缺陷"><a href="#1、缺陷" class="headerlink" title="1、缺陷"></a>1、缺陷</h2><ol>
+<li>公钥很大</li>
+<li>参数设计困难</li>
+<li>安全性分析负责</li>
+</ol>
+<h2 id="2、攻击手法"><a href="#2、攻击手法" class="headerlink" title="2、攻击手法"></a>2、攻击手法</h2><h3 id="1、Grobner-Basis-攻击"><a href="#1、Grobner-Basis-攻击" class="headerlink" title="1、Gröbner Basis 攻击"></a>1、Gröbner Basis 攻击</h3><p>$$已知目标：y&#x3D;(y_1,y_2,….y_m), 构造f_i(x)&#x3D;P_i(x) - y_i，得到： \begin {cases} f_1(x)&#x3D;0 \ f_2(x)&#x3D;0 \ \vdots \ f_m(x)&#x3D;0 \end {cases}$$</p>
+<p>$$构造多项式理想：I&#x3D;(f_1,f_2,…f_m) ，计算Gröbner基：G&#x3D;\lbrace g_1,g_2,…g_t \rbrace，消元得到： \begin {cases} g_1(x_n)&#x3D;0 \ g_2(x_{n-1},x_n)&#x3D;0 \ \vdots \ g_n(x_1,x_2,…x_n)&#x3D;0  \end {cases}$$</p>
+<p>逐个推到x_i</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Lamb</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2026/08/26/%E5%90%8E%E9%87%8F%E5%AD%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-MPKC/">http://example.com/2026/08/26/%E5%90%8E%E9%87%8F%E5%AD%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-MPKC/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Lamb</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Crypto/">Crypto</a><a class="post-meta__tags" href="/tags/%E5%90%8E%E9%87%8F%E5%AD%90%E5%AF%86%E7%A0%81/">后量子密码</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/08/27/%E5%90%8E%E9%87%8F%E5%AD%90%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-UOV/" title="后量子密码学习笔记-UOV"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">后量子密码学习笔记-UOV</div></div><div class="info-2"><div class="info-item-1">一、简介UOV是一种数字签名方案，即使在量子计算机面前也能保持安全。它基于陷门多元二次映射，遵循哈希和符号范式构建。 二、基本概念Oil和Vinegar $$设总共有n个变量，m个Oil变量：o_1,o_2,…,o_m，v个Vinegar变量v_1,v_2,…,v_v$$ $$UOV限制：没有OO项，只有VV和VO项$$ Unbalanced UOV 设置 v&gt;m  通过增加Vinegar变量隐藏Oil子空间，提高对结构恢复攻击的抵抗能力 三、算法原理$$UOV流程：KeyGen \rightarrow Sign \rightarrow Verify$$ 1、密钥生成 KeyGen$$首先构造秘密中心映射：F&#x3D;(f_1,f_2,…,f_m) \quad f_i满足OO&#x3D;0$$ $$那么F(v,o)&#x3D;VV+VO+一次项，然后生成秘密可逆线性变换：T \in GL_n(\mathbb F_q)$$ $$构造公开映射： P&#x3D;F∘T，因此P(x)&#x3D;F(T(x))$$ $$最终sk&#x3D;(F,T) \quad pk&#x3D;$...</div></div></div></a><a class="pagination-related" href="/2026/08/24/%E5%90%8E%E9%87%8F%E5%AD%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-HQC/" title="后量子密码学习笔记-HQC"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">后量子密码学习笔记-HQC</div></div><div class="info-2"><div class="info-item-1">一、简介HQC（Hamming Quasi-Cyclic，汉明准循环码）是一种基于编码理论的后量子密钥封装机制（KEM），用于在公共网络中安全交换加密密钥。 HQC 用准循环综合解码问题隐藏低重量秘密，用私钥完成噪声抵消，用公开 RMRS 码恢复消息，再用带盐 FO 转换把基础公钥加密升级成抗选择密文攻击的密钥封装机制。 二、基本内容1.流程Key Encapsulation Mechanism，密钥封装机制 123456789101112Bob：(pk, sk) ← KeyGen()Alice：(K, ct) ← Encaps(pk)把 ct 发给 BobBob：K&#x27; ← Decaps(sk, ct)正常情况下：K&#x27; = K  协议： 12345HQC 生成共享密钥 K              ↓HKDF / KDF 派生会话密钥              ↓AES-GCM 或 ChaCha20-Poly1305 加密数据  2.Hamming：汉明度量$HQC 中所有主要向量都位于二元域：\mathbb F^n_2,每个分量只有 0 或 1$ 汉明重量就...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/08/27/%E5%90%8E%E9%87%8F%E5%AD%90%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-UOV/" title="后量子密码学习笔记-UOV"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-27</div><div class="info-item-2">后量子密码学习笔记-UOV</div></div><div class="info-2"><div class="info-item-1">一、简介UOV是一种数字签名方案，即使在量子计算机面前也能保持安全。它基于陷门多元二次映射，遵循哈希和符号范式构建。 二、基本概念Oil和Vinegar $$设总共有n个变量，m个Oil变量：o_1,o_2,…,o_m，v个Vinegar变量v_1,v_2,…,v_v$$ $$UOV限制：没有OO项，只有VV和VO项$$ Unbalanced UOV 设置 v&gt;m  通过增加Vinegar变量隐藏Oil子空间，提高对结构恢复攻击的抵抗能力 三、算法原理$$UOV流程：KeyGen \rightarrow Sign \rightarrow Verify$$ 1、密钥生成 KeyGen$$首先构造秘密中心映射：F&#x3D;(f_1,f_2,…,f_m) \quad f_i满足OO&#x3D;0$$ $$那么F(v,o)&#x3D;VV+VO+一次项，然后生成秘密可逆线性变换：T \in GL_n(\mathbb F_q)$$ $$构造公开映射： P&#x3D;F∘T，因此P(x)&#x3D;F(T(x))$$ $$最终sk&#x3D;(F,T) \quad pk&#x3D;$...</div></div></div></a><a class="pagination-related" href="/2026/08/24/%E5%90%8E%E9%87%8F%E5%AD%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-HQC/" title="后量子密码学习笔记-HQC"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-24</div><div class="info-item-2">后量子密码学习笔记-HQC</div></div><div class="info-2"><div class="info-item-1">一、简介HQC（Hamming Quasi-Cyclic，汉明准循环码）是一种基于编码理论的后量子密钥封装机制（KEM），用于在公共网络中安全交换加密密钥。 HQC 用准循环综合解码问题隐藏低重量秘密，用私钥完成噪声抵消，用公开 RMRS 码恢复消息，再用带盐 FO 转换把基础公钥加密升级成抗选择密文攻击的密钥封装机制。 二、基本内容1.流程Key Encapsulation Mechanism，密钥封装机制 123456789101112Bob：(pk, sk) ← KeyGen()Alice：(K, ct) ← Encaps(pk)把 ct 发给 BobBob：K&#x27; ← Decaps(sk, ct)正常情况下：K&#x27; = K  协议： 12345HQC 生成共享密钥 K              ↓HKDF / KDF 派生会话密钥              ↓AES-GCM 或 ChaCha20-Poly1305 加密数据  2.Hamming：汉明度量$HQC 中所有主要向量都位于二元域：\mathbb F^n_2,每个分量只有 0 或 1$ 汉明重量就...</div></div></div></a><a class="pagination-related" href="/2026/06/09/DASCTF%202026/" title="DASCTF 2026"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-09</div><div class="info-item-2">DASCTF 2026</div></div><div class="info-2"><div class="info-item-1">three_friends题目12345678910111213141516171819202122232425262728293031323334353637383940from Crypto.Util.number import *flag = b&quot;***********&quot;L = len(flag)m1 = bytes_to_long(flag[:L//3])m2 = bytes_to_long(flag[L//3:2*L//3])m3 = bytes_to_long(flag[2*L//3:])p = getPrime(512)q = getPrime(512)r = getPrime(512)e = 65537n1 = p * qn2 = q * rn3 = p * rc1 = pow(m1, e, n1)c2 = pow(m2, e, n2)c3 = pow(m3, e, n3)print(f&quot;n1 = &#123;n1&#125;&quot;)print(f&quot;n2 = &#123;n2&#125;&quot;)print(f&q...</div></div></div></a><a class="pagination-related" href="/2026/08/29/%E4%BA%AC%E9%BA%92%E6%9D%AF%202025-Unwind%20On%20Vacation%20UOV%E9%97%AE%E9%A2%98/" title="京麒杯 2025-Unwind On Vacation UOV问题"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">京麒杯 2025-Unwind On Vacation UOV问题</div></div><div class="info-2"><div class="info-item-1">Unwind On Vacation题目1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465from ast import literal_evalfrom hashlib import shake_128import secretsFLAG = &quot;flag&#123;redacted&#125;&quot;def Hash(msg):    h = int(shake_128(msg).hexdigest(3*m),16)    return vector(GF(q),[(h:=h//q)%q if i else h%q for i in range(m)])#h=a0+a1q+a2q^2+...    H(msg)=(a0,a1,a2,...)class UOV:    def __init__(self, m, n, q):        self.params = (m, n...</div></div></div></a><a class="pagination-related" href="/2026/08/29/%E4%BA%AC%E9%BA%92%E6%9D%AF%202025-%20Onelinercrypto%20%E6%97%B6%E9%97%B4%E4%BE%A7%E4%BF%A1%E9%81%93%E9%97%AE%E9%A2%98/" title="京麒杯 2025- Onelinercrypto 时间侧信道问题"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">京麒杯 2025- Onelinercrypto 时间侧信道问题</div></div><div class="info-2"><div class="info-item-1">Onelinercrypto题目1assert __import__(&#x27;re&#x27;).fullmatch(br&#x27;flag\&#123;[!-z]&#123;11&#125;\&#125;&#x27;,flag:=os.getenvb(b&#x27;FLAG&#x27;)) and [is_prime(int(flag.hex(),16)^^int(input(&#x27;🌌 &#x27;))) for _ in range(7^7)]  思路flag的格式是 有11个ASCII码从！到z的字符 1flag&#123;xxxxxxxxxxx&#125;  输入7^7个数和f进行异或判断是否为质数，得到的是一个非空列表，输出终为True 时间侧信道： 题目不会输出is_prime的结果，但是可以利用判断是否为质数的时间。思路是分别求出m模3，模5…的值，然后用CRT求出flag 对于模3：记N&#x3D;m^^x  m为奇数，排除被2整除的影响 分别构造三组输入，让对应的N模3覆盖{0,1,2}，当N模3为0时，所需要的时间较短 构造输入：$(k+j*3)...</div></div></div></a><a class="pagination-related" href="/2026/09/07/2026%E7%A3%90%E7%9F%B3%E8%A1%8C%E5%8A%A8/" title="2026 磐石行动 Crypto wp"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-09-07</div><div class="info-item-2">2026 磐石行动 Crypto wp</div></div><div class="info-2"><div class="info-item-1">bad_share思路根据题目信息，阈值k&#x3D;5所以$$deg(f)&lt;5，目标secret&#x3D;f(0)&#x3D;a_0$$ 由于有两份错误份额故不能直接插值，又$$9&#x3D;n\geq k+2t&#x3D;5+4$$满足Berlekamp-Welch 条件 构造错误多项式：$$E(x)&#x3D;x^2+bx+c \quad 令Q(x)&#x3D;E(x)f(x) \quad def(Q)&lt;7$$ $$那么Q(x_i)&#x3D;y_iE(x_i)\Rightarrow Q(x_i)-y_i(x_i^2+bx_i+c)&#x3D;0$$ 9个方程9个未知数可解 解答12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273from sage.all import *shares=[    (      4,      &quot;17...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lamb</div><div class="author-info-description">Nothing but yourself</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Lamb-fish/Lamb-fish.github.io" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:lilili1l1lilili@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=3249875390&amp;website=www.oicqzone.com/" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">2.</span> <span class="toc-text">二、基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E6%9C%89%E9%99%90%E5%9F%9F%E4%B8%8A"><span class="toc-number">2.1.</span> <span class="toc-text">1、有限域上</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%A4%9A%E5%85%83%E4%BA%8C%E6%AC%A1%E6%96%B9%E7%A8%8BMQ"><span class="toc-number">2.2.</span> <span class="toc-text">2、多元二次方程MQ</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E4%B8%AD%E5%BF%83%E6%98%A0%E5%B0%84"><span class="toc-number">2.3.</span> <span class="toc-text">3、中心映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E4%BB%BF%E5%B0%84%E5%8F%98%E6%8D%A2"><span class="toc-number">2.4.</span> <span class="toc-text">4、仿射变换</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%8E%9F%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">三、原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%B8%BB%E8%A6%81%E7%B1%BB%E5%9E%8B"><span class="toc-number">4.</span> <span class="toc-text">四、主要类型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81Oil-Vinegar"><span class="toc-number">4.1.</span> <span class="toc-text">1、Oil-Vinegar</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81Rainbow"><span class="toc-number">4.2.</span> <span class="toc-text">2、Rainbow</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81HFE"><span class="toc-number">4.3.</span> <span class="toc-text">3、HFE</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%BC%BA%E9%99%B7%E4%B8%8E%E6%94%BB%E5%87%BB"><span class="toc-number">5.</span> <span class="toc-text">五、缺陷与攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E7%BC%BA%E9%99%B7"><span class="toc-number">5.1.</span> <span class="toc-text">1、缺陷</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95"><span class="toc-number">5.2.</span> <span class="toc-text">2、攻击手法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Grobner-Basis-%E6%94%BB%E5%87%BB"><span class="toc-number">5.2.1.</span> <span class="toc-text">1、Gröbner Basis 攻击</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/07/2026%E7%A3%90%E7%9F%B3%E8%A1%8C%E5%8A%A8/" title="2026 磐石行动 Crypto wp">2026 磐石行动 Crypto wp</a><time datetime="2026-09-07T15:25:07.000Z" title="发表于 2026-09-07 23:25:07">2026-09-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/%E4%BA%AC%E9%BA%92%E6%9D%AF%202025-Unwind%20On%20Vacation%20UOV%E9%97%AE%E9%A2%98/" title="京麒杯 2025-Unwind On Vacation UOV问题">京麒杯 2025-Unwind On Vacation UOV问题</a><time datetime="2026-08-29T15:28:07.000Z" title="发表于 2026-08-29 23:28:07">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/%E4%BA%AC%E9%BA%92%E6%9D%AF%202025-%20Onelinercrypto%20%E6%97%B6%E9%97%B4%E4%BE%A7%E4%BF%A1%E9%81%93%E9%97%AE%E9%A2%98/" title="京麒杯 2025- Onelinercrypto 时间侧信道问题">京麒杯 2025- Onelinercrypto 时间侧信道问题</a><time datetime="2026-08-29T15:25:07.000Z" title="发表于 2026-08-29 23:25:07">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/%E5%9B%BD%E5%AF%86-SM4/" title="国密-SM4">国密-SM4</a><time datetime="2026-08-29T15:25:07.000Z" title="发表于 2026-08-29 23:25:07">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/27/%E5%90%8E%E9%87%8F%E5%AD%90%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-UOV/" title="后量子密码学习笔记-UOV">后量子密码学习笔记-UOV</a><time datetime="2026-08-27T13:18:07.000Z" title="发表于 2026-08-27 21:18:07">2026-08-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lamb</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'ams',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>离散对数算法 | Lamb</title><meta name="author" content="Lamb"><meta name="copyright" content="Lamb"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Baby-step giant-step (BSGS)条件$$当n较小时，在群阶n的平方根级别时间内求解g^x&#x3D;h，适用于阶n小于等于2^{40}$$ 原理 中间相遇攻击$$设G使一个n阶循环群，生成元为g，已知h&#x3D;g^x，求x$$ $$记x&#x3D;i\cdot m+j，其中m&#x3D;\lceil \sqrt n \rceil,则方程变为：$$ $$g^{i \cdot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="离散对数算法">
+<meta property="og:url" content="http://example.com/2026/04/15/%E7%A6%BB%E6%95%A3%E5%AF%B9%E6%95%B0/index.html">
+<meta property="og:site_name" content="Lamb">
+<meta property="og:description" content="Baby-step giant-step (BSGS)条件$$当n较小时，在群阶n的平方根级别时间内求解g^x&#x3D;h，适用于阶n小于等于2^{40}$$ 原理 中间相遇攻击$$设G使一个n阶循环群，生成元为g，已知h&#x3D;g^x，求x$$ $$记x&#x3D;i\cdot m+j，其中m&#x3D;\lceil \sqrt n \rceil,则方程变为：$$ $$g^{i \cdot">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/avatar.jpg">
+<meta property="article:published_time" content="2026-04-15T14:25:07.000Z">
+<meta property="article:modified_time" content="2026-09-08T16:04:47.849Z">
+<meta property="article:author" content="Lamb">
+<meta property="article:tag" content="Crypto">
+<meta property="article:tag" content="离散对数">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/avatar.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "离散对数算法",
+  "url": "http://example.com/2026/04/15/%E7%A6%BB%E6%95%A3%E5%AF%B9%E6%95%B0/",
+  "image": "http://example.com/img/avatar.jpg",
+  "datePublished": "2026-04-15T14:25:07.000Z",
+  "dateModified": "2026-09-08T16:04:47.849Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lamb",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/04/15/%E7%A6%BB%E6%95%A3%E5%AF%B9%E6%95%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '离散对数算法',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lamb</span></a><a class="nav-page-title" href="/"><span class="site-name">离散对数算法</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">离散对数算法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-04-15T14:25:07.000Z" title="发表于 2026-04-15 22:25:07">2026-04-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-08T16:04:47.849Z" title="更新于 2026-09-09 00:04:47">2026-09-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Crypto/">Crypto</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Crypto/%E7%AE%97%E6%B3%95/">算法</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Baby-step-giant-step-BSGS"><a href="#Baby-step-giant-step-BSGS" class="headerlink" title="Baby-step giant-step (BSGS)"></a>Baby-step giant-step (BSGS)</h1><h2 id="条件"><a href="#条件" class="headerlink" title="条件"></a>条件</h2><p>$$当n较小时，在群阶n的平方根级别时间内求解g^x&#x3D;h，适用于阶n小于等于2^{40}$$</p>
+<h2 id="原理-中间相遇攻击"><a href="#原理-中间相遇攻击" class="headerlink" title="原理 中间相遇攻击"></a>原理 中间相遇攻击</h2><p>$$设G使一个n阶循环群，生成元为g，已知h&#x3D;g^x，求x$$</p>
+<p>$$记x&#x3D;i\cdot m+j，其中m&#x3D;\lceil \sqrt n \rceil,则方程变为：$$</p>
+<p>$$g^{i \cdot m+j}&#x3D;h \qquad  \Rightarrow \qquad g^j&#x3D;h\cdot (g^{-m})^i$$</p>
+<ul>
+<li>$$Baby step:计算所有g^j$$</li>
+<li>$$Giant step:计算所有h\cdot (g^{-m})^i$$</li>
+</ul>
+<p>$$若LHS&#x3D;RHS，即可得到x&#x3D;im+j$$</p>
+<h2 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h2><h3 id="1-sagemath-bsgs函数"><a href="#1-sagemath-bsgs函数" class="headerlink" title="1.sagemath bsgs函数"></a>1.sagemath bsgs函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">p = </span><br><span class="line">g = Mod(, p)</span><br><span class="line">h = Mod(, p)</span><br><span class="line">n = p - <span class="number">1</span>   <span class="comment">#群阶</span></span><br><span class="line"></span><br><span class="line">x = bsgs(g, h, (<span class="number">0</span>, n))   <span class="comment"># Sage 内置 bsgs 函数，返回一个解</span></span><br><span class="line"><span class="built_in">print</span>(x)  <span class="comment"># 输出 4258</span></span><br><span class="line">p =</span><br><span class="line">a, b = </span><br><span class="line">E = EllipticCurve(GF(p), [a, b])</span><br><span class="line">G = E(,)</span><br><span class="line">Q = E(,)</span><br><span class="line">n = G.order()   <span class="comment">#阶</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 导入 Sage 内置的 bsgs 函数</span></span><br><span class="line"><span class="keyword">from</span> sage.groups.generic <span class="keyword">import</span> bsgs</span><br><span class="line">d = bsgs(G, Q, (<span class="number">0</span>, n))</span><br><span class="line"><span class="built_in">print</span>(d) </span><br></pre></td></tr></table></figure>
+
+<h3 id="2-手动实现"><a href="#2-手动实现" class="headerlink" title="2.手动实现"></a>2.手动实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">bsgs_ec</span>(<span class="params">G, Q, n</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    BSGS for elliptic curve additive group.</span></span><br><span class="line"><span class="string">    G: base point (order n)</span></span><br><span class="line"><span class="string">    Q: target point (Q = x*G)</span></span><br><span class="line"><span class="string">    returns x (0 &lt;= x &lt; n)</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    m = ceil(sqrt(n))</span><br><span class="line">    <span class="comment"># Baby steps</span></span><br><span class="line">    baby = &#123;&#125;</span><br><span class="line">    current = G * <span class="number">0</span>  <span class="comment"># 无穷远点 O</span></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">        <span class="keyword">if</span> current <span class="keyword">not</span> <span class="keyword">in</span> baby:   <span class="comment"># 避免重复（理论上不会有，因为阶足够大）</span></span><br><span class="line">            baby[current] = j</span><br><span class="line">        current = current + G     <span class="comment"># (j+1)G</span></span><br><span class="line">    <span class="comment"># Giant steps: compute factor = -m*G</span></span><br><span class="line">    factor = -m * G</span><br><span class="line">    current = Q</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">if</span> current <span class="keyword">in</span> baby:</span><br><span class="line">            j = baby[current]</span><br><span class="line">            <span class="keyword">return</span> i * m + j</span><br><span class="line">        current = current + factor</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span>  <span class="comment"># not found (should not happen)</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Pllard’s-rho-算法"><a href="#Pllard’s-rho-算法" class="headerlink" title="Pllard’s rho 算法"></a>Pllard’s rho 算法</h1><h2 id="条件-1"><a href="#条件-1" class="headerlink" title="条件"></a>条件</h2><p>用于求离散对数问题的概率算法，与BSGS相比，空间复杂度极低，适用于在有限内存环境中处理大规模群，常用于在阶为2^40到2^60范围内。</p>
+<h2 id="核心思想：生日悖论与循环检测"><a href="#核心思想：生日悖论与循环检测" class="headerlink" title="核心思想：生日悖论与循环检测"></a>核心思想：生日悖论与循环检测</h2><h3 id="生日悖论"><a href="#生日悖论" class="headerlink" title="生日悖论"></a>生日悖论</h3><p>典：一间教室内，至少需要多少人才能使至少有两人生日相同的概率超过50%</p>
+<p>答：23</p>
+<p><strong>数学推导：</strong></p>
+<p>$$记N&#x3D;365，随机选择k个人，他们的生日两两不同的概率是：$$</p>
+<p>$$P(B)&#x3D;\Pi_{i&#x3D;0}^{k-1} (1-\frac{i}{N})$$</p>
+<p>$$当x很小时，1-x \rightarrow e^{-x}代入：$$</p>
+<p>$$P(B) \rightarrow e^{-\Pi _{i&#x3D;0}^{k-1} \frac{i}{N}}&#x3D;e^{-\frac{k(k-1)}{2N}}$$</p>
+<p>目标：</p>
+<p>$$P(A)&gt;0.5 \Leftrightarrow P(B) &lt;0.5$$</p>
+<p>$$\Leftrightarrow \qquad \frac{k(k-1)}{2N} &lt; ln2$$</p>
+<p>$$\Leftrightarrow \qquad k&lt;\sqrt {2N\cdot ln2} \approx 22.5$$</p>
+<p><strong>推广：</strong></p>
+<p>$$从一个大小为N的集合中随机选取一些元素，期望碰撞次数为\sqrt {\frac{\pi N}{2}}$$</p>
+<h3 id="循环检测"><a href="#循环检测" class="headerlink" title="循环检测"></a>循环检测</h3><p>$$在一个有限集合上迭代一个确定性函数f:S \rightarrow S,从任意起点x_0出$$</p>
+<p>$$序列x_0,x_1&#x3D;f(x_0),x2&#x3D;f(x_1),…必然进入一个循环$$</p>
+<p>经典算法：Floyd判圈算法，Brent算法</p>
+<h1 id="Pohlig-Hellman算法"><a href="#Pohlig-Hellman算法" class="headerlink" title="Pohlig-Hellman算法"></a>Pohlig-Hellman算法</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Pohlig-Hellman算法是一种求解离散对数问题的算法，适用于群的阶为光滑数，将原始的大规模DLP问题分解为一系列小阶子群上的DLP，再通过CPT算出最终解</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>$$对于循环群G：阶为n，生成元为g，n&#x3D;\Pi_{i&#x3D;1}^k p_i^{e_i}$$</p>
+<p>$$已知h \equiv g^x \pmod n，求x$$</p>
+<h3 id="对于每个素数幂p-e，求解x-pmod-p-e"><a href="#对于每个素数幂p-e，求解x-pmod-p-e" class="headerlink" title="$$对于每个素数幂p^e，求解x \pmod {p^e}$$"></a>$$对于每个素数幂p^e，求解x \pmod {p^e}$$</h3><ol>
+<li>$$我们先求出x \pmod p$$</li>
+</ol>
+<p>$$令g_0&#x3D;g^{\frac{n}{p}},h_0&#x3D;h^{\frac {n}{p}}，那么g_0^p&#x3D;g^n&#x3D;1_G，即有g_0的阶为p$$</p>
+<p>$$而h_0&#x3D;(g^x)^{\frac{n}{p}}&#x3D;(g^{\frac{n}{p}})^x&#x3D;g_0^x，因此在阶为p的子群上，可以用BSGS或Pollard’s rho求解x \pmod p,记为x_0$$</p>
+<ol>
+<li>$$提升到x \pmod {p^e$$</li>
+</ol>
+<p>考虑亨泽尔提升或逐次逼近</p>
+<p>逐次递推逼近：</p>
+<p>$$假设已知x_j \pmod {p^j},目标：确定x_{j+1} \pmod {p^{j+1}}$$</p>
+<p>$$令x&#x3D;x_j+t \cdot p^j,其中未知数t \in [0,p)，已知：$$</p>
+<p>$$g^{x_j+t \cdot p^j}&#x3D;h \Rightarrow g^{t \cdot p^j}&#x3D;h \cdot g^{-x_j}$$</p>
+<p>$$令g_j&#x3D;g^{p^j},注意到g_j的阶为\frac{n}{gcd(p_j,n)}&#x3D;p^{e-j},RHS&#x3D;h \cdot g^{-x_j}$$</p>
+<p>$$需要解： g_j^t&#x3D;h_j$$</p>
+<p>$$此时，等式两边的元素都属于一个阶为p^{e-j}的循环子群，由于t \in [0,p)，实际上可以将问题约化到p的子群上：$$</p>
+<ul>
+<li>$$计算g_j’&#x3D;g_j^{p^{e-j-1}},其阶为p，计算h_j’&#x3D;h_j^{p^{e-j-1}}$$</li>
+<li>$$则(g_j’)^t&#x3D;h_j’,这是一个阶为p的子群上的DLP，可解到t$$</li>
+</ul>
+<p>$$于是得到了x_{j+1}&#x3D;x_j+t \cdot p^j，逐次递推逼近即可得到x \pmod {p^e}$$</p>
+<ol>
+<li>CRT</li>
+</ol>
+<p>$$对每个素数幂p_i^{e_i} 求出x_i \pmod {p_i^{e_i}},然后中国剩余定理：$$</p>
+<p>$$x \equiv \Sigma_{i&#x3D;1}^k x_i \cdot M_i \cdot M_i^{-1} \pmod n \qquad 其中M_i&#x3D;\frac{n}{p_i^{ei}},M_i^{-1} \pmod {p_i^{e_i}}$$</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><h3 id="1-离散对数求解-discrete-log"><a href="#1-离散对数求解-discrete-log" class="headerlink" title="1.离散对数求解 discrete_log"></a>1.离散对数求解 discrete_log</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">p = </span><br><span class="line">g = </span><br><span class="line">h = </span><br><span class="line">x = discrete_log(h, g, <span class="built_in">ord</span>= ,operation=<span class="string">&#x27;+/*&#x27;</span>)</span><br><span class="line"><span class="comment">#h 目标值；g 生成元；ord 阶（可无）；operation 运算类型</span></span><br><span class="line"><span class="built_in">print</span>(x) </span><br></pre></td></tr></table></figure>
+
+<h3 id="2-有限域GF-p-上的离散对数-GF-p-multiplicative-generator"><a href="#2-有限域GF-p-上的离散对数-GF-p-multiplicative-generator" class="headerlink" title="2.有限域GF(p)上的离散对数 GF(p).multiplicative_generator()"></a>2.有限域GF(p)上的离散对数 GF(p).multiplicative_generator()</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">F = GF(p)</span><br><span class="line">g = F.multiplicative_generator()   <span class="comment"># 原根</span></span><br><span class="line">h = </span><br><span class="line">x = g.log(h)                       <span class="comment"># 或 h.log(g)</span></span><br><span class="line"><span class="built_in">print</span>(x)  </span><br></pre></td></tr></table></figure>
+
+<h3 id="3-椭圆曲线上的离散对数"><a href="#3-椭圆曲线上的离散对数" class="headerlink" title="3.椭圆曲线上的离散对数"></a>3.椭圆曲线上的离散对数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">E = EllipticCurve(GF(p), [a,b])</span><br><span class="line">P = E(,)     <span class="comment"># 生成元</span></span><br><span class="line">Q = E(,)     <span class="comment"># 已知倍点</span></span><br><span class="line">x = discrete_log(Q, P, <span class="built_in">ord</span>=P.order(), operation=<span class="string">&#x27;+&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(x) </span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Lamb</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2026/04/15/%E7%A6%BB%E6%95%A3%E5%AF%B9%E6%95%B0/">http://example.com/2026/04/15/%E7%A6%BB%E6%95%A3%E5%AF%B9%E6%95%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Lamb</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Crypto/">Crypto</a><a class="post-meta__tags" href="/tags/%E7%A6%BB%E6%95%A3%E5%AF%B9%E6%95%B0/">离散对数</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/04/17/ECC-%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/" title="ECC-加密算法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">ECC-加密算法</div></div><div class="info-2"><div class="info-item-1">一、数学定义1、原根$$设n、a为互质的正整数，令a^d\equiv 1 \pmod n，如果用\delta (n,a)表示使该式子成立的最小整数d，此时如果\delta (n,a)&#x3D;\phi (n)成立，则称a为模n的原根。$$ 2、离散对数$$对整数b、指数p及其原根a，若可找到唯一指数使得b \equiv a^i \pmod p，其中i \in [0,p-1]，则称i为b的以a为基数的离散对$$ 二、ELGamal私钥与公钥****的计算  随机选取一个大素数p，要求p-1有大素数因子 $$选择一个模p的原根a和整数i有i \in (1,p-1$$ $$计算b \equiv a^i \pmod $$  此时公钥集合(p,a,b)，私钥i 加密过程  $$随机选取证书k,k \in (1,p-1$$ $$计算U \equiv b^k \pmod $$ $$计算C_1\equiv a^k \pmod p$$ $$计算C_2\equiv U*M \pmod p$$  $$得到密文(C_1,C_2$$ 解密过程  $$计算V\equiv C_1^i \pmod $$ $$...</div></div></div></a><a class="pagination-related" href="/2026/03/31/ECC%20%E7%90%86%E8%AE%BA%E7%9F%A5%E8%AF%86/" title="ECC 理论知识"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">ECC 理论知识</div></div><div class="info-2"><div class="info-item-1">一、简介椭圆曲线密码（ECC）是基于椭圆曲线数学理论构建的非对称加密技术，其安全性依赖于椭圆曲线离散对数问题（ECDLP）的数学困难性。 $$ECC基于有限域上的椭圆曲线方程定义代数结构，通过点加法运算形成有限Abel群。$$ $$目前椭圆曲线主要采用的有限域有以素数为模的整数域 GF(p)和特征为2的伽罗华域 GF(2^m)$$ 二、数学基础离散对数$$对整数b、指数p及其原根a，若可找到唯一指数使得b \equiv a^i \pmod p，其中i \in [0,p-1]，则称i为b的以a为基数的离散对数$$ 阿贝尔群一个集合G配备一个二元运算（通常称为加法或乘法）满足以下四条公理：  封闭性：$$\forall a,b \in G,a \cdot b\in G(或a+b \in G)$$ 结合律：$$\forall a,b,c \in G,(a \cdot b)\cdot c&#x3D;a \cdot (b \cdot c) $$ 单位元：$$\exists e \in G,使得\forall a \in G,e \cdot a&#x3D;a\cdot e&#x3D;a$$ ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/08/26/%E5%90%8E%E9%87%8F%E5%AD%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-MPKC/" title="后量子密码-MPKC"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-26</div><div class="info-item-2">后量子密码-MPKC</div></div><div class="info-2"><div class="info-item-1">一、简介多元公钥密码系统是后量子密码系统，其安全性依赖于解决有限域上多元多项式方程组的NP难问题。 多元公钥密码学（MPKC）是一系列密码系统，设计用于替代传统方案如RSA和DSA，尤其是在后量子时代。MPKC中的公钥是一组多元多项式，通常是二次的，定义在有限域上。MPKC的安全性基于解决这些系统的NP难度，使其能抵抗经典和量子攻击 优点：加解密、签名验证速度快，缺点：密钥存储的开销很高 二、基本概念1、有限域上$$设\mathbb F&#x3D;\mathbb F_q是具有q个元素的有限域，常见的有\mathbb F_2,\mathbb F_{2^8},\mathbb F_{16},\mathbb F_{256}$$ 2、多元二次方程MQ$$设有n个变量x_1,x_2,…x_n，m个二元多项式P_1,P_2,…P_m$$ $$多项式表示为：P_i(x)&#x3D;\sum_{j \leq k} R_{ijk}x_jx_k+\sum_j Q_{ij}x_j^2+\sum_jP_{ij}x_j$$ $$因此系统可表示为：P:\mathbb F_q^n \rightarrow \ma...</div></div></div></a><a class="pagination-related" href="/2026/03/19/Wiener's%20Attack%20%E7%BB%B4%E7%BA%B3%E6%94%BB%E5%87%BB/" title="Wiener&#39;s Attack 维纳攻击"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-19</div><div class="info-item-2">Wiener&#39;s Attack 维纳攻击</div></div><div class="info-2"><div class="info-item-1">维纳攻击一、攻击条件设$$N&#x3D;pq,q&lt;p&lt;2q,$$若： $$d &lt; \frac {1}{3}N^{\frac {1}{4}}$$ 给出$$N,e(ed \equiv 1 \pmod {\lambda (N)}，$$则攻击者可以恢复d 针对维纳攻击的对策：  选择较大公钥：$$将e替换为e’&#x3D;e+k \lambda(N),当e’足够大即e’&gt;N^{\frac {3}{2}}$$ 中国剩余定理：$$选择d使得\quad dp \equiv d \pmod {p-1},dq \equiv d \pmod {q-1},但d本身不小，那么可以：$$  $$计算M_p \equiv C^dp \pmod p,Mq \equiv c^dq \pmod q$$ $$利用中国剩余定理：M \equiv M_p \pmod p,M\equiv M_q \pmod q，其中0 \leq M &lt;N$$ $$由于d模 \lambda (N)可能很大，故维纳攻击并不适用$$ 二、攻击原理How to attack$$记G&#x3D;gcd(p-1,q-1...</div></div></div></a><a class="pagination-related" href="/2026/03/24/e%E5%92%8C%CF%86(n)%E4%B8%8D%E4%BA%92%E7%B4%A0/" title="RSA-e和φ(n)不互素"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-24</div><div class="info-item-2">RSA-e和φ(n)不互素</div></div><div class="info-2"><div class="info-item-1">数学知识Ⅰ.二次剩余$$m^2 \equiv c \pmod{p}，记p&#x3D;2^t \cdot {s}，由Euler准则：$$ $$对于二次剩余：x^{(p-1)&#x2F;2} \equiv 1 \pmod p,即x^{2^{(t-1)} \cdot {s}} \equiv 1 \pmod p$$ $$对于二次非剩余：y^{(p-1)&#x2F;2} \equiv -1 \pmod p,即y^{2^{(t-1)} \cdot {s}} \equiv -1 \pmod p$$ (1)当t&#x3D;1时$$x^s \equiv 1 \pmod p,两边同时乘x再开方得：x^{(s+1)&#x2F;2} \equiv x^{1&#x2F;2} \pmod p$$ $$将c代入：c^{(s+1)&#x2F;2} \equiv c^{1&#x2F;2} \pmod p$$ $$故m \equiv c^{1&#x2F;2} \equiv c^{(s+1)&#x2F;2} \pmod p$$ (2)当t&gt;1时$$若直接开方：x^{2^{t-2} \cdot {s}} \equ...</div></div></div></a><a class="pagination-related" href="/2026/08/24/%E5%90%8E%E9%87%8F%E5%AD%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-HQC/" title="后量子密码学习笔记-HQC"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-24</div><div class="info-item-2">后量子密码学习笔记-HQC</div></div><div class="info-2"><div class="info-item-1">一、简介HQC（Hamming Quasi-Cyclic，汉明准循环码）是一种基于编码理论的后量子密钥封装机制（KEM），用于在公共网络中安全交换加密密钥。 HQC 用准循环综合解码问题隐藏低重量秘密，用私钥完成噪声抵消，用公开 RMRS 码恢复消息，再用带盐 FO 转换把基础公钥加密升级成抗选择密文攻击的密钥封装机制。 二、基本内容1.流程Key Encapsulation Mechanism，密钥封装机制 123456789101112Bob：(pk, sk) ← KeyGen()Alice：(K, ct) ← Encaps(pk)把 ct 发给 BobBob：K&#x27; ← Decaps(sk, ct)正常情况下：K&#x27; = K  协议： 12345HQC 生成共享密钥 K              ↓HKDF / KDF 派生会话密钥              ↓AES-GCM 或 ChaCha20-Poly1305 加密数据  2.Hamming：汉明度量$HQC 中所有主要向量都位于二元域：\mathbb F^n_2,每个分量只有 0 或 1$ 汉明重量就...</div></div></div></a><a class="pagination-related" href="/2026/03/28/%E6%A0%BC%E5%AF%86%E7%A0%81-LLL/" title="格密码-LLL"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-28</div><div class="info-item-2">格密码-LLL</div></div><div class="info-2"><div class="info-item-1">一、简介格规约是将格的基向量转换为正交性更好、长度更短的新基向量的数学方法，主要应用于多输入多输出（MIMO）系统信号检测和密码分析领域。其核心在于通过算法改善基向量正交性，典型应用包括MIMO检测器设计、最短向量问题（SVP）求解及公钥密码系统分析。 二、SVP与CVP1.SVP（shortest Vector Problem）最短向量问题在这一个格L中最短的非零向量 即寻找一个v满足欧几里得范数最小（指该集合的每一个元素的平方和再开方）范数就是指长度。注意，格中最短的向量可能不止一个。 格基规约：找到最接近正交的基向量  假设v不是基中的向量，此刻该向量一定可以通过在其他基向量方向的投影来得到一个更短的向量  2.CVP（Closet Vector Problem）最近向量问题给定一个不在格内的向量w，找到一个格内向量v，满足||v-w||最小  与SVP的关系：有些问题可以通过对CVP加上一维之后转变为SVP问题，因为SVP相比CVP稍微简单一些  三、格攻击理论1.Minkowski凸体定理（1）定理场景： $$L \subset \mathbb{R}^n:一个满秩格$$...</div></div></div></a><a class="pagination-related" href="/2026/05/25/5%E6%9C%88%E6%AF%94%E8%B5%9B%E5%90%88%E9%9B%86/" title="5月比赛合集"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="info-item-2">5月比赛合集</div></div><div class="info-2"><div class="info-item-1">这些题目还是比较简单的，所以放一起了。 zeroG CTF 2026Twin Orbit题目123456789101112131415#!/usr/bin/env python3# -*- coding: utf-8 -*-from Crypto.Util.number import bytes_to_longdef encrypt_message(flag: bytes, n: int):    m = bytes_to_long(flag)    e1 = 65537    e2 = 17    c1 = pow(m, e1, n)    c2 = pow(m, e2, n)    return e1, e2, c1, c2  思路已知$$c_1&#x3D;m^{e_1} \pmod n ,c_2&#x3D;m^{e_2} \pmod n$$ 用扩展欧几里得求出: se1+te2&#x3D;gcd(e1,e2)&#x3D;1 则$$m&#x3D;c_1^s*c_2^t \pmod n$$ 解答12345678910111213141516from Crypto.Util.nu...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lamb</div><div class="author-info-description">Nothing but yourself</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">15</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Lamb-fish/Lamb-fish.github.io" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:lilili1l1lilili@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=3249875390&amp;website=www.oicqzone.com/" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Baby-step-giant-step-BSGS"><span class="toc-number">1.</span> <span class="toc-text">Baby-step giant-step (BSGS)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6"><span class="toc-number">1.1.</span> <span class="toc-text">条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-%E4%B8%AD%E9%97%B4%E7%9B%B8%E9%81%87%E6%94%BB%E5%87%BB"><span class="toc-number">1.2.</span> <span class="toc-text">原理 中间相遇攻击</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.3.</span> <span class="toc-text">算法实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-sagemath-bsgs%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.1.</span> <span class="toc-text">1.sagemath bsgs函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%89%8B%E5%8A%A8%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.手动实现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Pllard%E2%80%99s-rho-%E7%AE%97%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">Pllard’s rho 算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6-1"><span class="toc-number">2.1.</span> <span class="toc-text">条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3%EF%BC%9A%E7%94%9F%E6%97%A5%E6%82%96%E8%AE%BA%E4%B8%8E%E5%BE%AA%E7%8E%AF%E6%A3%80%E6%B5%8B"><span class="toc-number">2.2.</span> <span class="toc-text">核心思想：生日悖论与循环检测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%97%A5%E6%82%96%E8%AE%BA"><span class="toc-number">2.2.1.</span> <span class="toc-text">生日悖论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E6%A3%80%E6%B5%8B"><span class="toc-number">2.2.2.</span> <span class="toc-text">循环检测</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Pohlig-Hellman%E7%AE%97%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">Pohlig-Hellman算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">3.1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">3.2.</span> <span class="toc-text">原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E4%BA%8E%E6%AF%8F%E4%B8%AA%E7%B4%A0%E6%95%B0%E5%B9%82p-e%EF%BC%8C%E6%B1%82%E8%A7%A3x-pmod-p-e"><span class="toc-number">3.2.1.</span> <span class="toc-text">$$对于每个素数幂p^e，求解x \pmod {p^e}$$</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.3.</span> <span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%A6%BB%E6%95%A3%E5%AF%B9%E6%95%B0%E6%B1%82%E8%A7%A3-discrete-log"><span class="toc-number">3.3.1.</span> <span class="toc-text">1.离散对数求解 discrete_log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%9C%89%E9%99%90%E5%9F%9FGF-p-%E4%B8%8A%E7%9A%84%E7%A6%BB%E6%95%A3%E5%AF%B9%E6%95%B0-GF-p-multiplicative-generator"><span class="toc-number">3.3.2.</span> <span class="toc-text">2.有限域GF(p)上的离散对数 GF(p).multiplicative_generator()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%A4%AD%E5%9C%86%E6%9B%B2%E7%BA%BF%E4%B8%8A%E7%9A%84%E7%A6%BB%E6%95%A3%E5%AF%B9%E6%95%B0"><span class="toc-number">3.3.3.</span> <span class="toc-text">3.椭圆曲线上的离散对数</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/07/2026%E7%A3%90%E7%9F%B3%E8%A1%8C%E5%8A%A8/" title="2026 磐石行动 Crypto wp">2026 磐石行动 Crypto wp</a><time datetime="2026-09-07T15:25:07.000Z" title="发表于 2026-09-07 23:25:07">2026-09-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/%E4%BA%AC%E9%BA%92%E6%9D%AF%202025-Unwind%20On%20Vacation%20UOV%E9%97%AE%E9%A2%98/" title="京麒杯 2025-Unwind On Vacation UOV问题">京麒杯 2025-Unwind On Vacation UOV问题</a><time datetime="2026-08-29T15:28:07.000Z" title="发表于 2026-08-29 23:28:07">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/%E4%BA%AC%E9%BA%92%E6%9D%AF%202025-%20Onelinercrypto%20%E6%97%B6%E9%97%B4%E4%BE%A7%E4%BF%A1%E9%81%93%E9%97%AE%E9%A2%98/" title="京麒杯 2025- Onelinercrypto 时间侧信道问题">京麒杯 2025- Onelinercrypto 时间侧信道问题</a><time datetime="2026-08-29T15:25:07.000Z" title="发表于 2026-08-29 23:25:07">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/%E5%9B%BD%E5%AF%86-SM4/" title="国密-SM4">国密-SM4</a><time datetime="2026-08-29T15:25:07.000Z" title="发表于 2026-08-29 23:25:07">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/27/%E5%90%8E%E9%87%8F%E5%AD%90%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-UOV/" title="后量子密码学习笔记-UOV">后量子密码学习笔记-UOV</a><time datetime="2026-08-27T13:18:07.000Z" title="发表于 2026-08-27 21:18:07">2026-08-27</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lamb</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'ams',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
