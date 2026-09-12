@@ -13,9 +13,9 @@
       
       <categories>
           
-          <category> Crypto </category>
-          
           <category> WP </category>
+          
+          <category> 磐石行动 </category>
           
       </categories>
       
@@ -42,9 +42,9 @@
       
       <categories>
           
-          <category> Crypto </category>
-          
           <category> WP </category>
+          
+          <category> 湾区杯 </category>
           
       </categories>
       
@@ -71,9 +71,9 @@
       
       <categories>
           
-          <category> Crypto </category>
-          
           <category> WP </category>
+          
+          <category> 京麒杯 </category>
           
       </categories>
       
@@ -82,7 +82,9 @@
             
             <tag> Crypto </tag>
             
-            <tag> CTF，后量子密码 </tag>
+            <tag> CTF </tag>
+            
+            <tag> 后量子密码 </tag>
             
         </tags>
       
@@ -100,9 +102,9 @@
       
       <categories>
           
-          <category> Crypto </category>
-          
           <category> WP </category>
+          
+          <category> 京麒杯 </category>
           
       </categories>
       
@@ -207,7 +209,7 @@
     
     
     <entry>
-      <title>CCF汽车安全初赛——Digital Key UWB.SQLite题解</title>
+      <title>CCF汽车安全初赛——Digital Key UWB SQLite题解</title>
       <link href="/2026/08/06/CCF%E6%B1%BD%E8%BD%A6%E5%AE%89%E5%85%A8%E5%88%9D%E8%B5%9B%E2%80%94%E2%80%94Digital%20Key%20UWB.SQLite%E9%A2%98%E8%A7%A3/"/>
       <url>/2026/08/06/CCF%E6%B1%BD%E8%BD%A6%E5%AE%89%E5%85%A8%E5%88%9D%E8%B5%9B%E2%80%94%E2%80%94Digital%20Key%20UWB.SQLite%E9%A2%98%E8%A7%A3/</url>
       
@@ -303,9 +305,9 @@
       
       <categories>
           
-          <category> Crypto </category>
-          
           <category> WP </category>
+          
+          <category> DASCTF </category>
           
       </categories>
       
@@ -332,9 +334,9 @@
       
       <categories>
           
-          <category> Crypto </category>
-          
           <category> WP </category>
+          
+          <category> 5月比赛合集 </category>
           
       </categories>
       
@@ -393,6 +395,8 @@
       <categories>
           
           <category> WP </category>
+          
+          <category> 4月比赛合集 </category>
           
       </categories>
       
