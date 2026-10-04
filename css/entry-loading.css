@@ -1,0 +1,40 @@
+#loading-box {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+    url("/img/entry-bg.jpg") center / cover no-repeat;
+
+  --preloader-bg: transparent;
+  --preloader-color: #ffffff;
+}
+
+/* 让原本的两侧遮罩变成透明 */
+#loading-box .loading-left-bg,
+#loading-box .loading-right-bg {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* 隐藏默认旋转方框 */
+#loading-box .configure-border-1,
+#loading-box .configure-border-2 {
+  display: none !important;
+}
+
+/* 只显示文字 */
+#loading-box .loading-word {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0;
+  white-space: nowrap;
+}
+
+#loading-box .loading-word::after {
+  content: "Nothing but yourself.";
+  color: white;
+  font-size: 20px;
+  letter-spacing: 3px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
