@@ -1,40 +1,170 @@
+/* 加载页主体 */
 #loading-box {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
-    url("/img/entry-bg.jpg") center / cover no-repeat;
+  overflow: hidden;
+  isolation: isolate;
 
-  --preloader-bg: transparent;
-  --preloader-color: #ffffff;
+  background: #8d96a6;
+
+  transition:
+    opacity 0.6s ease 2s,
+    visibility 0s linear 2.6s;
 }
 
-/* 让原本的两侧遮罩变成透明 */
+/* 背景图片 */
+#loading-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image: url("/image/entry-bg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  filter: none;
+  transform: none;
+
+  z-index: -2;
+}
+
+/* 背景遮罩 */
+#loading-box::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: transparent;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 隐藏 Butterfly 默认加载元素 */
 #loading-box .loading-left-bg,
-#loading-box .loading-right-bg {
-  background: rgba(0, 0, 0, 0.08);
-}
-
-/* 隐藏默认旋转方框 */
+#loading-box .loading-right-bg,
 #loading-box .configure-border-1,
-#loading-box .configure-border-2 {
+#loading-box .configure-border-2,
+#loading-box .loading-word {
   display: none !important;
 }
 
-/* 只显示文字 */
-#loading-box .loading-word {
+/* 中间容器 */
+#loading-box .spinner-box {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Fall Down 外层舞台 */
+[data-gsap-effect-stage="textFallDown"] {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 240px;
+  overflow: hidden;
+}
+
+/* 文字容器 */
+[data-gsap-effect="textFallDown"] {
+  --card-text-hero: clamp(24px, 3vw, 42px);
+  --text: #ffffff;
+
+  position: absolute;
   top: 50%;
   left: 50%;
+
+  width: min(88vw, 720px);
+  height: 90px;
+
   transform: translate(-50%, -50%);
-  font-size: 0;
+  transform-origin: center center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--text);
+  font-size: var(--card-text-hero);
+  font-weight: 900;
+  letter-spacing: 0 !important;
+  text-align: center;
   white-space: nowrap;
 }
 
-#loading-box .loading-word::after {
-  content: "Nothing but yourself.";
-  color: white;
-  font-size: 20px;
-  letter-spacing: 3px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+/* 官方动画生成的外层结构 */
+[data-gsap-effect="textFallDown"] > div {
+  width: 100%;
+  height: 100% !important;
+  max-width: none !important;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 0 !important;
+  letter-spacing: 0 !important;
+}
+
+/* 文字行 */
+[data-gsap-effect="textFallDown"] > div > div {
+  display: block;
+  width: 100%;
+
+  text-align: center;
+  letter-spacing: 0 !important;
+}
+
+/* 单词 */
+.textFallDown-word {
+  display: inline-block;
+  white-space: nowrap;
+  letter-spacing: 0 !important;
+}
+
+/* 单词之间的空格 */
+.textFallDown-space {
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+}
+
+/* 单个字母 */
+.textFallDown-char {
+  display: inline-block;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  letter-spacing: 0 !important;
+  will-change: transform, opacity;
+}
+
+/* 页面加载完成后隐藏 */
+#loading-box.loaded {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* 防止 Butterfly 立即隐藏动画 */
+#loading-box.loaded .spinner-box {
+  display: flex !important;
+}
+
+/* 手机端 */
+@media screen and (max-width: 768px) {
+  [data-gsap-effect="textFallDown"] {
+    width: 92vw;
+    font-size: 21px;
+  }
+
+  .textFallDown-space {
+    width: 0.45em;
+  }
 }
