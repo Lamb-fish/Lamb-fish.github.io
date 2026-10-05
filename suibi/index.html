@@ -1,0 +1,261 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>随笔 | Lamb</title><meta name="author" content="Lamb"><meta name="copyright" content="Lamb"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="2024.07.30随笔 · 01雨落竹帘雨落竹帘  桃源小亭  素笔洒墨你着一袭白衣    穿叶挑花看剑少侠意气风发    佩刀护着绣袋长途万里  风卷残云  白雪凄凄我低头瞧不见你眉眼那夜天里你弹过的琴    推搡着云雾缭绕    却仍看见你的形状狼烟四起  烽火红月  刀光剑影少年铁甲英姿    勒马冲锋陷阵千纸溯命  百转轮回 宿命回响不知是哪里的传言只知你似那出鞘的利刃  却不复">
+<meta property="og:type" content="website">
+<meta property="og:title" content="随笔">
+<meta property="og:url" content="http://example.com/suibi/index.html">
+<meta property="og:site_name" content="Lamb">
+<meta property="og:description" content="2024.07.30随笔 · 01雨落竹帘雨落竹帘  桃源小亭  素笔洒墨你着一袭白衣    穿叶挑花看剑少侠意气风发    佩刀护着绣袋长途万里  风卷残云  白雪凄凄我低头瞧不见你眉眼那夜天里你弹过的琴    推搡着云雾缭绕    却仍看见你的形状狼烟四起  烽火红月  刀光剑影少年铁甲英姿    勒马冲锋陷阵千纸溯命  百转轮回 宿命回响不知是哪里的传言只知你似那出鞘的利刃  却不复">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/avatar.jpg">
+<meta property="article:published_time" content="2026-10-05T13:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-05T13:16:58.518Z">
+<meta property="article:author" content="Lamb">
+<meta property="article:tag" content="Writeup,Learning,CTF,Crypto,Life">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/avatar.jpg"><script type="application/ld+json"></script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/suibi/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '随笔',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'page'
+}</script><link rel="stylesheet" href="/css/entry-loading.css"><link rel="preload" as="image" href="/image/entry-bg.png"><script>try{if(sessionStorage.getItem("blog-page-transition")==="1"){document.documentElement.classList.add("page-transition");sessionStorage.removeItem("blog-page-transition")}}catch(e){}</script><script>document.addEventListener("click",function(e){if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;var a=e.target.closest&&e.target.closest("a");if(!a||a.target==="_blank"||a.hasAttribute("download"))return;var u=new URL(a.href,location.href);if(u.origin!==location.origin||(u.pathname===location.pathname&&u.search===location.search))return;try{sessionStorage.setItem("blog-page-transition","1")}catch(_){}},true)</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&display=swap" rel="stylesheet"><script>if(window.GLOBAL_CONFIG_SITE&&GLOBAL_CONFIG_SITE.pageType==="home"){document.documentElement.classList.add("home-bg-page")}</script><link rel="stylesheet" href="/css/entry-loading.css?v=7"><link rel="stylesheet" href="/css/home-hero.css?v=5"><link rel="stylesheet" href="/css/background-scroll.css?v=5"><link rel="stylesheet" href="/css/social-qr.css?v=1"><link rel="stylesheet" href="/css/content-font.css?v=1"><link rel="stylesheet" href="/css/essays.css?v=14"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div class="bg-animation" id="web_bg" style="background-image: url(/image/home-cover.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">34</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/suibi/"><i class="fa-fw fa fa-feather-alt"></i><span> 随笔</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page type-page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lamb</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/suibi/"><i class="fa-fw fa fa-feather-alt"></i><span> 随笔</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">随笔</h1></header><main class="layout hide-aside" id="content-inner"><div id="page"><div class="page-title">随笔</div><div class="container" id="article-container"><div class="essay-page" aria-label="随笔列表">
+<div class="essay-carousel" data-essay-carousel>
+<button class="essay-carousel-button essay-carousel-button-prev" type="button" aria-label="上一张随笔"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+<div class="essay-grid" tabindex="0" aria-label="随笔卡片，可左右滑动">
+<a class="essay-card" href="/essays/yuluozhulian/"><div class="essay-card-cover"><img src="/image/yuluozhulian.jpg" alt="雨落竹帘" loading="lazy"><time datetime="2024-07-30">2024.07.30</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 01</p><h3>雨落竹帘</h3><p class="essay-card-excerpt">雨落竹帘  桃源小亭  素笔洒墨<br>你着一袭白衣    穿叶挑花看剑<br>少侠意气风发    佩刀护着绣袋<br>长途万里  风卷残云  白雪凄凄<br>我低头瞧不见你眉眼<br>那夜天里你弹过的琴    推搡着<br>云雾缭绕    却仍看见你的形状<br>狼烟四起  烽火红月  刀光剑影<br>少年铁甲英姿    勒马冲锋陷阵<br>千纸溯命  百转轮回 宿命回响<br>不知是哪里的传言<br>只知你似那出鞘的利刃  却不复返  也不负黎明  唯独负了她<br>犹记得你说  她的浅浅几笔即是<br>桃花漫天   临江折柳   星光灿烂</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/bibo/"><div class="essay-card-cover"><img src="/image/bibo.jpg" alt="竹里" loading="lazy"><time datetime="2024-06-28">2024.06.28</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 02</p><h3>竹里</h3><p class="essay-card-excerpt">碧波载着归舟刺绣于流水<br>倒影泛着晨光收针于涟漪<br>痴人低喃  醉饮清风  恍惚入梦<br>流水桥旁花已眠  竹林古寺鸟更闲<br>瓦上霜   门前雪   一身青衣不染尘<br>茶花香   风残月   一卷笺纸余沾墨<br>暖炉灶边酒未醒  红尘滚滚人更清<br>庭外响   檐下雨   一纸繁花缀窗边<br>落英飏   契旧约   一页往事沦心弦</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/migong/"><div class="essay-card-cover"><img src="/image/migong.jpg" alt="迷宫" loading="lazy"><time datetime="2024-06-16">2024.06.16</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 03</p><h3>迷宫</h3><p class="essay-card-excerpt">迷宫<br>汹涌起伏的云山云海<br>塞满了孤星点点的天际<br>喧嚣混浊的滚滚红尘<br>充斥着酣梦羁绊的宇宙<br>过去的荣光变成身后的墙<br>未来的迷雾化作前方的障<br>我走不出这满是漏洞的迷宫<br>那便伴着西风酗酒一夜皆空</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/suiyueyinxiale/"><div class="essay-card-cover"><img src="/image/岁月饮下了.jpg" alt="岁月饮下了醉人的篇章" loading="lazy"><time datetime="2024-05-25">2024.05.25</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 04</p><h3>岁月饮下了醉人的篇章</h3><p class="essay-card-excerpt">岁月饮下了醉人的篇章<br>夜以继日  卷落繁霜<br>趁着灵魂还可飞扬<br>握一剑星光与日丈量</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/shiguangtunxiale/"><div class="essay-card-cover"><img src="/image/时光吞下.jpg" alt="时光吞下了悲情的软风" loading="lazy"><time datetime="2024-05-25">2024.05.25</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 05</p><h3>时光吞下了悲情的软风</h3><p class="essay-card-excerpt">时光吞下了悲情的软风<br>旦及夜继   以落尘世<br>趁着灵魂还可飞扬<br>拥一江落花与月徜徉</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/youju/"><div class="essay-card-cover"><img src="/image/youju.jpg" alt="幽居" loading="lazy"><time datetime="2024-04-29">2024.04.29</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 06</p><h3>幽居</h3><p class="essay-card-excerpt">幽居<br>绵绵春雨打石桥<br>浅浅晨曦透木窗<br>落英易染春光老<br>残阳愿随年华逝<br>小园梨花开满地<br>何处旧人锁心门<br>明月明    明月明<br>我心之幽居</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/dongriyishi/"><div class="essay-card-cover"><img src="/image/dongriyishi.jpg" alt="冬日已诗" loading="lazy"><time datetime="2024-04-27">2024.04.27</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 07</p><h3>冬日已诗</h3><p class="essay-card-excerpt">冬日已诗，春色正浓<br>阳光洒过的大地肆意绽放<br>雨水滋润的生灵随性独行<br>太阳赠予我心脏 在屋檐下跳动<br>月亮赐予我泪花 在细雨中流淌<br>这灰色的生活也会长出橘红的花瓣<br>这平淡的日子也能与耀眼星月同眠</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/wuxing/"><div class="essay-card-cover"><img src="/image/wuxing.jpg" alt="无形之独鸟" loading="lazy"><time datetime="2024-04-13">2024.04.13</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 08</p><h3>无形之独鸟</h3><p class="essay-card-excerpt">我为无形之独鸟<br>振翼以漫天翱翔<br>上帝却予我独舟<br>囚我于大海汪洋</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/morizhihua/"><div class="essay-card-cover"><img src="/image/morizhihua.jpg" alt="末日之花" loading="lazy"><time datetime="2023-07-27">2023.07.27</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 09</p><h3>末日之花</h3><p class="essay-card-excerpt">末日之花<br>猩红的月光洒向人间，远山的灰烬飘向四方，末日的缝隙愈来愈深。血红色模糊了视野，烈火卷来残枝，寒风吹起枯叶，头顶的窟窿汲取人界的绝望。<br>风儿带来一封神明的信件，上面写着：末日即将开出绚丽的花。信封被折成玫瑰，裹着念想，回到了风的怀抱。<br>一场盛大的雨落下，干涸的土地涌出了甘泉，枯萎的树梢冒出了新芽。<br>淡黄的路灯下，我祈求月光的怀抱。去淋一场大雨，逃离这情绪的漩涡，打破这内耗的囚笼，击碎这焦躁与不安。去爱这个破碎的世界吧，亦或灿烂亦或贫瘠，去寻找尘封的记忆，去寻灯火阑珊处，去摸索着归家。<br>残破不堪的世界啊，开出了末日之花。</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/feng/"><div class="essay-card-cover"><img src="/image/feng.jpg" alt="风" loading="lazy"><time datetime="2023-04-21">2023.04.21</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 10</p><h3>风</h3><p class="essay-card-excerpt">风灌进我的躯壳<br>海淹没了我的喉<br>神明将我的灵魂交与黄昏<br>在黎明到来之前<br>我会将世上的条条框框打破</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/posui/"><div class="essay-card-cover"><img src="/image/posui.jpg" alt="破碎的月光" loading="lazy"><time datetime="2023-02-19">2023.02.19</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 11</p><h3>破碎的月光</h3><p class="essay-card-excerpt">破碎的月光刺穿了我<br>残存的灵魂生出了花</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/lie/"><div class="essay-card-cover"><img src="/image/lie.jpg" alt="烈冽" loading="lazy"><time datetime="2023-01-27">2023.01.27</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 12</p><h3>烈冽</h3><p class="essay-card-excerpt">愿你化为烈焰，焚尽我这座孤山<br>愿你化为冽水，溺爱我这条独鱼</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/ziyoudebishou/"><div class="essay-card-cover"><img src="/image/ziyoudebishou.jpg" alt="自由的匕首" loading="lazy"><time datetime="2023-01-25">2023.01.25</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 13</p><h3>自由的匕首</h3><p class="essay-card-excerpt">就让我去拥抱风吧<br>风吹过的衣角肆意摇摆<br>风拂起的落花张牙舞爪<br>风如刀片划过我的肌肤<br>我的灵魂在摆渡 我的灵魂在消殆<br>我将深埋于埃土 我将厚葬于深海<br>就让这炽热肆意生长吧<br>自由的匕首，是我</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/shige/"><div class="essay-card-cover"><img src="/image/shige.jpg" alt="人间之失格" loading="lazy"><time datetime="2023-01-24">2023.01.24</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 14</p><h3>人间之失格</h3><p class="essay-card-excerpt">漫长的昼，无尽的夜<br>我为人间之失格，躲躲藏藏<br>却总是星星点点，落下几缕月光</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/xingzhuang/"><div class="essay-card-cover"><img src="/image/xingzhuang.jpg" alt="无形之自由" loading="lazy"><time datetime="2023-01-23">2023.01.23</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 15</p><h3>无形之自由</h3><p class="essay-card-excerpt">我自春日而来，又与秋日私语<br>我伴狂风相拥，也与暴雨热吻<br>我穿梭于日出，我徘徊于日落<br>我观过往云烟之走马灯<br>我坠深不可测之深海渊<br>我躺在世界的边缘<br>看潮起潮落，看云卷云舒<br>我看山，看水，看无尽的思念<br>我没有形状，我就是自由本身</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/shijiandejulun/"><div class="essay-card-cover"><img src="/image/shijiandejulun.jpg" alt="时间的巨轮" loading="lazy"><time datetime="2023-01-22">2023.01.22</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 16</p><h3>时间的巨轮</h3><p class="essay-card-excerpt">时间的巨轮向我驶来<br>反方向的钟停滞不动<br>我将去寻找尘封已久的落花<br>然后藏进梦里</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/gusi/"><div class="essay-card-cover"><img src="/image/gusi.jpg" alt="愿" loading="lazy"><time datetime="2023-01-22">2023.01.22</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 17</p><h3>愿</h3><p class="essay-card-excerpt">古寺焚了千万只香，木板挂了万千红愿。<br>地上的生灵点亮烛火，向神明祈福：<br>愿世间再无饥寒 愿世间再无病痛<br>愿祖国繁荣昌盛 愿世界和平无乱<br>愿再无性别歧视 愿女性独立自主</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/banzhuzhi/"><div class="essay-card-cover"><img src="/image/zhu.jpg" alt="斑竹枝" loading="lazy"><time datetime="2023-01-20">2023.01.20</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 18</p><h3>斑竹枝</h3><p class="essay-card-excerpt">斑竹枝<br>竹枝斑斑 微光穿透罅隙 似与埃土相融<br>油伞恍恍 雨滴打在眉间 欲伴佳人无眠<br>水漫石阶 一壶清茶袅袅 携子之手折扇<br>雪落竹海 乌篷船头乱了方向<br>抚琴吹笙 愿与一人共度余生</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/xingyue/"><div class="essay-card-cover"><img src="/image/xingyue.jpg" alt="星月" loading="lazy"><time datetime="2023-01-20">2023.01.20</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 19</p><h3>星月</h3><p class="essay-card-excerpt">当星月划过天际，零星之浮鱼驶入冰封的深海，潮起潮落中泯灭世俗的喧哗。<br>惘然，只剩下一番晓梦，万卷红澜。</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/fei-niao/"><div class="essay-card-cover"><img src="/image/feiniao.jpg" alt="飞鸟" loading="lazy"><time datetime="2023-01-19">2023.01.19</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 20</p><h3>飞鸟</h3><p class="essay-card-excerpt">飞鸟<br>我自向阳而生 也曾追星逐月<br>而后化为飞鸟 穿梭繁华闹市<br>青砖红瓦  盖碗清茶<br>细数月光  静对朝荣<br>闯入泰戈尔的晓梦中<br>寻不堕红尘之镜花水月<br>觅春江花朝之秋心月夜<br>一日看尽长安花<br>三生流转桃源鸟</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/shan-dian/"><div class="essay-card-cover"><img src="/image/shan.jpg" alt="山巅" loading="lazy"><time datetime="2023-01-18">2023.01.18</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 21</p><h3>山巅</h3><p class="essay-card-excerpt">我站在青山之巅<br>会有市井城巷中的生灵仰望我<br>也有星云天宫中的神明俯瞰我<br>我想做的 只有平视万物<br>看春的复苏之风 看夏的花团锦簇<br>看秋的落英缤纷 看冬的白雪飘零<br>在大漠中燃狼烟 在林深处寻麋鹿<br>在烈火中涅槃 在深海里重生<br>做飞翔的鸟 做遨游的鱼<br>做无名的花 做春始的草<br>做初升的日 做圆缺的月</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+<a class="essay-card" href="/essays/xue/"><div class="essay-card-cover"><img src="/image/snow.jpg" alt="雪" loading="lazy"><time datetime="2023-01-15">2023.01.15</time></div><div class="essay-card-body"><p class="essay-card-kicker">随笔 · 22</p><h3>雪</h3><p class="essay-card-excerpt">雪<br>空雪琴生   狂风冷颜<br>犹记少年风流：<br>佳人伴雪 耀光负身 肆意三分进球<br>此心曾与暮兰舟   往昔过<br>便化为一缕瘴烟   风卷去<br><br>琴生不等式（Jensen's inequality）<br><br>若f(x)为区间[a,b]上的下凸函数，则对任意的x_i 属于[a,b]，有：<br>$$\frac{\sum_{i=1}^n f(x_i)}{n} \geq f(\frac{\sum_{i=1}^n x_i}{n})$$<br><br>加权形式：a_i为正数且a_1+a_2+...+a_n=1，有：<br>$$\sum_{i=1}^na_if(x_i) \geq f(\sum_{i=1}^n a_ix_i)$$</p><span class="essay-card-link">阅读全文 <i class="fas fa-arrow-right" aria-hidden="true"></i></span></div></a>
+</div>
+<button class="essay-carousel-button essay-carousel-button-next" type="button" aria-label="下一张随笔"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+</div>
+</div>
+</div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lamb</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"></div><div id="rightside-config-show"><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'ams',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script><script src="/js/fall-down.js?v=7"></script><script src="/js/home-hero.js?v=4"></script><script src="/js/background-scroll.js?v=5"></script><script src="/js/social-qr.js?v=1"></script><script src="/js/essays.js?v=3"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

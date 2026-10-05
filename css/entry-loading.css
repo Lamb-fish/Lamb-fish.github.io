@@ -23,7 +23,6 @@
   content: "";
   position: absolute;
   inset: 0;
-
   background: transparent;
   z-index: -1;
   pointer-events: none;
@@ -78,7 +77,6 @@
   justify-content: center;
 
   color: var(--text);
-  /* 恢复原来的主题字体 */
   font-family: "Sora", sans-serif !important;
   font-size: var(--card-text-hero);
   font-weight: 500;
@@ -176,6 +174,7 @@ body.page-transition [data-gsap-effect="textFallDown"],
     width: 0.45em;
   }
 }
+
 /* 底层只保留纯色，避免进入背景在页面上重复出现 */
 html,
 body {
@@ -187,4 +186,3 @@ body {
 #web_bg {
   opacity: 0.2;
 }
-

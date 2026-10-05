@@ -1,0 +1,82 @@
+/* 微信、QQ二维码悬停卡片 */
+.social-icon.social-qr {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Butterfly 侧边栏卡片默认 overflow:hidden，会把二维码弹窗截掉 */
+#aside-content .social-qr-card {
+  overflow: visible !important;
+}
+
+.social-qr-popup {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 14px);
+  z-index: 10000;
+
+  width: 190px;
+  padding: 10px;
+  box-sizing: border-box;
+
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-50%, 8px) scale(0.94);
+  transform-origin: bottom center;
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+}
+
+.social-qr-popup::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 13px;
+  height: 13px;
+  background: #fff;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.social-qr-popup img {
+  display: block;
+  width: 170px;
+  height: 170px;
+  max-width: none;
+  object-fit: contain;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.social-icon.social-qr:hover .social-qr-popup,
+.social-icon.social-qr:focus-visible .social-qr-popup {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0) scale(1);
+}
+
+/* 深色模式下保留二维码白底，保证扫码清晰 */
+[data-theme="dark"] .social-qr-popup,
+[data-theme="dark"] .social-qr-popup::after {
+  background: #fff;
+}
+
+@media screen and (max-width: 768px) {
+  .social-qr-popup {
+    width: 164px;
+  }
+
+  .social-qr-popup img {
+    width: 144px;
+    height: 144px;
+  }
+}

@@ -2,59 +2,27 @@
   "use strict";
 
   const root = document.documentElement;
-  const header = document.querySelector("#page-header.full_page");
-  const isHomePage = Boolean(header);
 
-  if (!isHomePage) {
+  if (!document.querySelector("#page-header.full_page")) {
     return;
   }
 
   root.classList.add("home-bg-page");
 
-  let ticking = false;
+  let blurred = false;
 
-  function updateBackground() {
-    const headerHeight = Math.max(header.offsetHeight, window.innerHeight);
-    const blurDistance = Math.max(headerHeight * 0.75, 360);
-    const progress = Math.min(
-      1,
-      Math.max(0, window.scrollY / blurDistance)
-    );
+  function updateBackgroundBlur() {
+    const shouldBlur = window.scrollY >= window.innerHeight * 0.5;
 
-    root.style.setProperty(
-      "--home-bg-opacity",
-      (progress * 0.22).toFixed(3)
-    );
-    root.style.setProperty(
-      "--home-bg-blur",
-      `${(progress * 14).toFixed(2)}px`
-    );
-    root.style.setProperty(
-      "--home-bg-brightness",
-      (1 - progress * 0.2).toFixed(3)
-    );
-    root.style.setProperty(
-      "--home-bg-scale",
-      (1 + progress * 0.045).toFixed(3)
-    );
-    root.style.setProperty(
-      "--home-bg-overlay",
-      (progress * 0.9).toFixed(3)
-    );
-
-    ticking = false;
-  }
-
-  function requestUpdate() {
-    if (ticking) {
+    if (shouldBlur === blurred) {
       return;
     }
 
-    ticking = true;
-    window.requestAnimationFrame(updateBackground);
+    blurred = shouldBlur;
+    root.classList.toggle("is-background-blurred", shouldBlur);
   }
 
-  updateBackground();
-  window.addEventListener("scroll", requestUpdate, { passive: true });
-  window.addEventListener("resize", requestUpdate);
+  updateBackgroundBlur();
+  window.addEventListener("scroll", updateBackgroundBlur, { passive: true });
+  window.addEventListener("resize", updateBackgroundBlur);
 })();

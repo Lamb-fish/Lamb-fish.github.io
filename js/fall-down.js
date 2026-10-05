@@ -11,11 +11,10 @@
       return null;
     }
 
-    spinnerBox.innerHTML = `
-      <div data-gsap-effect-stage="textFallDown">
-        <div data-gsap-effect="textFallDown"></div>
-      </div>
-    `;
+    spinnerBox.innerHTML =
+      '<div data-gsap-effect-stage="textFallDown">' +
+      '<div data-gsap-effect="textFallDown"></div>' +
+      "</div>";
 
     return spinnerBox.querySelector(
       '[data-gsap-effect="textFallDown"]'
@@ -34,21 +33,19 @@
       .map((word) => {
         const chars = [...word]
           .map(
-            (char) => `<span class="textFallDown-char">${char}</span>`
+            (char) => '<span class="textFallDown-char">' + char + "</span>"
           )
           .join("");
 
-        return `<span class="textFallDown-word">${chars}</span>`;
+        return '<span class="textFallDown-word">' + chars + "</span>";
       })
       .join('<span class="textFallDown-space"></span>');
 
-    element.innerHTML = `<div><div>${words}</div></div>`;
+    element.innerHTML = "<div><div>" + words + "</div></div>";
   }
 
   function play(element) {
-    const targets = element.querySelectorAll(
-      ".textFallDown-char"
-    );
+    const targets = element.querySelectorAll(".textFallDown-char");
 
     if (!targets.length || typeof gsap === "undefined") {
       return;
@@ -67,13 +64,11 @@
           transform: "translateY(-50px)",
           opacity: 0
         },
-
         "100%": {
           transform: "translateY(0)",
           opacity: 1
         }
       },
-
       duration: 0.5,
       stagger: 0.05,
       ease: "power2.out",
@@ -92,9 +87,7 @@
     ).matches;
 
     if (reducedMotion) {
-      const targets = element.querySelectorAll(
-        ".textFallDown-char"
-      );
+      const targets = element.querySelectorAll(".textFallDown-char");
 
       gsap.set(targets, {
         transform: "translateY(0)",
@@ -173,9 +166,11 @@
       document
         .querySelector("#loading-box")
         ?.classList.remove("pjax-transition");
+
       try {
         sessionStorage.removeItem("blog-page-transition");
       } catch (error) {}
+
       transitionActive = false;
     }, 2600);
   }
@@ -184,28 +179,34 @@
   document.addEventListener("pjax:complete", endPageTransition);
 
   // 在 PJAX 发出事件前先响应站内链接点击，确保文字动画及时出现
-  document.addEventListener("click", (event) => {
-    if (event.defaultPrevented || event.button !== 0) return;
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  document.addEventListener(
+    "click",
+    (event) => {
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+      }
 
-    const link = event.target.closest?.("a");
+      const link = event.target.closest?.("a");
 
-    if (!link || link.target === "_blank" || link.hasAttribute("download")) {
-      return;
-    }
+      if (!link || link.target === "_blank" || link.hasAttribute("download")) {
+        return;
+      }
 
-    const url = new URL(link.href, window.location.href);
+      const url = new URL(link.href, window.location.href);
 
-    if (url.origin !== window.location.origin) return;
-    if (
-      url.pathname === window.location.pathname &&
-      url.search === window.location.search
-    ) {
-      return;
-    }
+      if (url.origin !== window.location.origin) return;
+      if (
+        url.pathname === window.location.pathname &&
+        url.search === window.location.search
+      ) {
+        return;
+      }
 
-    startPageTransition();
-  }, true);
+      startPageTransition();
+    },
+    true
+  );
 
   // Butterfly 的 PJAX 还会通过 btf 全局回调触发，这里一并注册
   if (window.btf && typeof btf.addGlobalFn === "function") {
@@ -222,10 +223,7 @@
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener(
-      "DOMContentLoaded",
-      init
-    );
+    document.addEventListener("DOMContentLoaded", init);
   } else {
     init();
   }

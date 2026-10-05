@@ -1,0 +1,14 @@
+/* 文章和“关于”页面正文：小幅放大，提高阅读舒适度 */
+#post #article-container.post-content,
+#page > #article-container {
+  font-size: 17px;
+  line-height: 1.9;
+}
+
+@media screen and (max-width: 768px) {
+  #post #article-container.post-content,
+  #page > #article-container {
+    font-size: 16px;
+    line-height: 1.85;
+  }
+}
