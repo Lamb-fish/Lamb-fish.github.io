@@ -236,6 +236,20 @@ body:has(#giscus-wrap):not(:has(#Mirror-to-me)) #page a {
   text-shadow: none;
 }
 
+/* 六个页面的内容块强制与侧边栏使用完全相同的背景变量 */
+body:has(.page.type-categories) #page,
+body:has(.page.type-tags) #page,
+body:has(#archive) #archive,
+body:has(.flink) #page,
+body:has(#Mirror-to-me) #page,
+body:has(#giscus-wrap):not(:has(#Mirror-to-me)) #page {
+  background: var(--sidebar-bg) !important;
+  background-color: var(--sidebar-bg) !important;
+  background-image: none !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+}
+
 body:has(.essay-page) #content-inner {
   width: 100% !important;
   max-width: none !important;
