@@ -1,0 +1,87 @@
+/*
+ * 首页背景滚动效果
+ * 首页顶部使用 #page-header 的清晰封面；滚动后显示固定、模糊的全站背景。
+ */
+
+html,
+body {
+  background: transparent !important;
+}
+
+#web_bg {
+  /* 放到页面底色之上，再让正文容器位于它上方，避免被 Hexo 的白色底色盖住 */
+  z-index: 0 !important;
+  opacity: 0.2;
+  animation: none !important;
+  background-attachment: fixed !important;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(12px) brightness(0.82);
+  transform: scale(1.045);
+  transform-origin: center center;
+  transition:
+    opacity 0.8s ease,
+    filter 0.9s ease,
+    transform 1s ease;
+  will-change: opacity, filter, transform;
+  pointer-events: none;
+}
+
+/* 正文容器透明，只让里面的卡片承担阅读底色 */
+#body-wrap {
+  position: relative;
+  z-index: 1;
+  background: transparent !important;
+}
+
+/* 让背景更暗一点，保证文章文字清楚 */
+#web_bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.16);
+  pointer-events: none;
+}
+
+/* 首页顶部：背景层先隐藏，顶部封面仍由 #page-header 单独显示 */
+html.home-bg-page #web_bg {
+  opacity: var(--home-bg-opacity, 0);
+  filter:
+    blur(var(--home-bg-blur, 0px))
+    brightness(var(--home-bg-brightness, 1));
+  transform: scale(var(--home-bg-scale, 1));
+}
+
+html.home-bg-page #web_bg::after {
+  opacity: var(--home-bg-overlay, 0);
+  transition: opacity 0.8s ease;
+}
+
+/* 内容区域保留白色半透明卡片，避免背景影响阅读 */
+.layout > div:first-child:not(.nc),
+#recent-posts .recent-post-item,
+#article-container .shuoshuo-item,
+#aside-content .card-widget,
+.layout .pagination > *:not(.space) {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+}
+
+/* 首页封面保持在背景层上方 */
+#page-header.full_page {
+  position: relative;
+  z-index: 0;
+}
+
+@media screen and (max-width: 768px) {
+  #web_bg {
+    filter: blur(8px) brightness(0.84);
+    transform: scale(1.035);
+  }
+
+  html.home-bg-page #web_bg {
+    filter:
+      blur(var(--home-bg-blur, 0px))
+      brightness(var(--home-bg-brightness, 1));
+  }
+}
