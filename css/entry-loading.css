@@ -6,7 +6,7 @@
   overflow: hidden;
   isolation: isolate;
 
-  background: #8d96a6;
+  background: #8d96a6 url("/image/entry-bg.png") center / cover no-repeat;
 
   transition:
     opacity 0.6s ease 2s,
@@ -15,19 +15,7 @@
 
 /* 背景图片 */
 #loading-box::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-
-  background-image: url("/image/entry-bg.jpg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-
-  filter: none;
-  transform: none;
-
-  z-index: -2;
+  display: none;
 }
 
 /* 背景遮罩 */
@@ -72,7 +60,7 @@
 
 /* 文字容器 */
 [data-gsap-effect="textFallDown"] {
-  --card-text-hero: clamp(24px, 3vw, 42px);
+  --card-text-hero: clamp(36px, 5vw, 72px);
   --text: #ffffff;
 
   position: absolute;
@@ -80,7 +68,7 @@
   left: 50%;
 
   width: min(88vw, 720px);
-  height: 90px;
+  height: 100px;
 
   transform: translate(-50%, -50%);
   transform-origin: center center;
@@ -90,8 +78,10 @@
   justify-content: center;
 
   color: var(--text);
+  /* 恢复原来的主题字体 */
+  font-family: "Sora", sans-serif !important;
   font-size: var(--card-text-hero);
-  font-weight: 900;
+  font-weight: 500;
   letter-spacing: 0 !important;
   text-align: center;
   white-space: nowrap;
@@ -124,6 +114,7 @@
 .textFallDown-word {
   display: inline-block;
   white-space: nowrap;
+  font-family: inherit !important;
   letter-spacing: 0 !important;
 }
 
@@ -131,7 +122,22 @@
 .textFallDown-space {
   display: inline-block;
   width: 0.5em;
+  flex: 0 0 0.5em;
   height: 1em;
+}
+
+/* PJAX 页面切换：白底黑字；首次进入仍使用图片和白字 */
+html.page-transition #loading-box,
+body.page-transition #loading-box,
+#loading-box.pjax-transition {
+  background: #ffffff !important;
+}
+
+html.page-transition [data-gsap-effect="textFallDown"],
+body.page-transition [data-gsap-effect="textFallDown"],
+#loading-box.pjax-transition [data-gsap-effect="textFallDown"] {
+  --text: #000000;
+  color: #000000;
 }
 
 /* 单个字母 */
@@ -141,6 +147,7 @@
   margin: 0 !important;
   padding: 0 !important;
 
+  font-family: inherit !important;
   letter-spacing: 0 !important;
   will-change: transform, opacity;
 }
@@ -161,10 +168,23 @@
 @media screen and (max-width: 768px) {
   [data-gsap-effect="textFallDown"] {
     width: 92vw;
-    font-size: 21px;
+    height: 80px;
+    font-size: 42px;
   }
 
   .textFallDown-space {
     width: 0.45em;
   }
 }
+/* 底层只保留纯色，避免进入背景在页面上重复出现 */
+html,
+body {
+  margin: 0;
+  background-color: #ffffff !important;
+}
+
+/* 其他页面使用同一张图片，但降低透明度，避免影响正文阅读 */
+#web_bg {
+  opacity: 0.2;
+}
+
