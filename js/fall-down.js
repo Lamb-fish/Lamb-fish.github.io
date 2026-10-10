@@ -160,12 +160,23 @@
   }
 
   function endPageTransition() {
+    clearTimeout(transitionTimer);
     transitionTimer = setTimeout(() => {
       document.body.classList.remove("page-transition");
       document.documentElement.classList.remove("page-transition");
-      document
-        .querySelector("#loading-box")
-        ?.classList.remove("pjax-transition");
+
+      const loadingBox = document.querySelector("#loading-box");
+      if (loadingBox) {
+        loadingBox.classList.add("loaded");
+        loadingBox.style.removeProperty("opacity");
+        loadingBox.style.removeProperty("visibility");
+        loadingBox.style.removeProperty("pointer-events");
+        window.setTimeout(() => {
+          loadingBox.classList.remove("pjax-transition");
+        }, 700);
+      }
+
+      document.body.style.overflow = "";
 
       try {
         sessionStorage.removeItem("blog-page-transition");

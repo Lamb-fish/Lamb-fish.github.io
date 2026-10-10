@@ -1,12 +1,12 @@
 (() => {
   const insertMusicCard = () => {
-    const aside = document.querySelector('#aside-content')
-    const stickyLayout = aside?.querySelector('.sticky_layout')
-
-    if (!aside || !stickyLayout || aside.querySelector('.card-music')) return
+    // #body-wrap is replaced by Butterfly PJAX. Keep the iframe under body so
+    // its browsing context and audio playback survive same-site navigation.
+    if (document.querySelector('#persistent-music-player')) return
 
     const card = document.createElement('div')
     card.className = 'card-widget card-music'
+    card.id = 'persistent-music-player'
     card.innerHTML = `
       <div class="item-headline">
         <i class="fas fa-music"></i>
@@ -24,7 +24,7 @@
       </iframe>
     `
 
-    aside.insertBefore(card, stickyLayout)
+    document.body.appendChild(card)
   }
 
   if (document.readyState === 'loading') {

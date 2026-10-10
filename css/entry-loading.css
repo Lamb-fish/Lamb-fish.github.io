@@ -129,6 +129,7 @@ html.page-transition #loading-box,
 body.page-transition #loading-box,
 #loading-box.pjax-transition {
   background: #ffffff !important;
+  transition: opacity 0.6s ease, visibility 0s linear 0.6s;
 }
 
 html.page-transition [data-gsap-effect="textFallDown"],

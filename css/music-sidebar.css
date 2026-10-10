@@ -1,4 +1,17 @@
-/* 侧边栏网易云单曲播放器 */
+/* PJAX 页面切换时保留网易云播放器 */
+.card-music {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 999;
+  width: min(270px, calc(100vw - 32px));
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  color: var(--font-color);
+  box-shadow: 0 4px 18px rgb(0 0 0 / 18%);
+}
+
 .card-music .item-headline {
   margin-bottom: 10px;
 }
@@ -9,4 +22,13 @@
   height: 86px;
   border: 0;
   border-radius: 8px;
+}
+
+@media screen and (max-width: 768px) {
+  .card-music {
+    left: 12px;
+    bottom: 12px;
+    width: min(240px, calc(100vw - 24px));
+    padding: 10px;
+  }
 }
