@@ -8,10 +8,6 @@
     card.className = 'card-widget card-music'
     card.id = 'persistent-music-player'
     card.innerHTML = `
-      <div class="item-headline">
-        <i class="fas fa-music"></i>
-        <span>音乐</span>
-      </div>
       <iframe
         class="music-player-frame"
         title="网易云音乐播放器"
