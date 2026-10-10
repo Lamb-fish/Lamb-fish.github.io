@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>车联网相关知识总结</title>
+      <link href="/2026/10/04/%E8%BD%A6%E8%81%94%E7%BD%91%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/"/>
+      <url>/2026/10/04/%E8%BD%A6%E8%81%94%E7%BD%91%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/</url>
+      
+        <content type="html"><![CDATA[<p>近期打了一些车联网相关的比赛，总结了一下遇到的知识，对于密码学在车联网中的应用感觉主要还是ECDSA和签名证书相关。</p><h1 id="V2X"><a href="#V2X" class="headerlink" title="V2X"></a>V2X</h1><p>V2X 指 <strong>Vehicle-to-Everything，车与外界通信</strong>，包括：</p><table><thead><tr><th>类型</th><th>含义</th><th>例子</th></tr></thead><tbody><tr><td>V2V</td><td>车与车通信</td><td>前车急刹提醒后车</td></tr><tr><td>V2I</td><td>车与路侧基础设施通信</td><td>红绿灯、RSU 路侧单元</td></tr><tr><td>V2P</td><td>车与行人通信</td><td>行人手机提醒车辆</td></tr><tr><td>V2N</td><td>车与云平台通信</td><td>交通云、车联网平台</td></tr></tbody></table><p>这道题主要模拟的是 <strong>V2X 广播安全消息</strong> 场景，也就是车辆不断广播自己的状态信息，例如位置、速度、方向、刹车状态等。</p><hr><h2 id="BSM-报文"><a href="#BSM-报文" class="headerlink" title="BSM 报文"></a>BSM 报文</h2><p>BSM 通常指 <strong>Basic Safety Message，基础安全消息</strong>。可以理解成车辆周期性发出的“我是谁、我在哪、我速度多少、我接下来可能怎么动”的广播数据。</p><p>真实车联网里，BSM 这类消息常用于：</p><ul><li><p>防碰撞预警；</p></li><li><p>盲区提醒；</p></li><li><p>交叉路口预警；</p></li><li><p>紧急制动提醒；</p></li><li><p>编队行驶；</p></li><li><p>自动驾驶协同感知。</p></li></ul><p>但是因为这些消息会影响车辆安全，所以不能随便伪造，必须带有 <strong>数字签名</strong>。</p><hr><h2 id="V2X-报文签名"><a href="#V2X-报文签名" class="headerlink" title="V2X 报文签名"></a>V2X 报文签名</h2><p>车联网广播是开放环境，任何设备理论上都可能监听或发送数据。</p><p>如果没有签名，攻击者可以伪造：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">前方有事故</span><br><span class="line">我是一辆急救车</span><br><span class="line">我正在紧急刹车</span><br><span class="line">我在你的左侧高速靠近</span><br></pre></td></tr></table></figure><p>车辆如果相信这些假消息，可能会做出错误决策。</p><p>所以 V2X 报文一般要满足：</p><table><thead><tr><th>安全目标</th><th>作用</th></tr></thead><tbody><tr><td>身份可信</td><td>确认消息来自合法车辆</td></tr><tr><td>消息完整</td><td>确认内容没有被篡改</td></tr><tr><td>不可抵赖</td><td>事后可以追溯行为</td></tr><tr><td>隐私保护</td><td>不能长期暴露真实车辆身份</td></tr></tbody></table><hr><h2 id="伪名证书"><a href="#伪名证书" class="headerlink" title="伪名证书"></a>伪名证书</h2><p>题里有 <code>pseudonym_bundle.pem</code>，也就是 <strong>伪名证书包</strong>。</p><p>车联网不能让车辆一直用真实身份广播，否则别人可以长期跟踪这辆车：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">车 A 每天早上 8 点从某小区出发</span><br><span class="line">晚上 6 点回到同一个位置</span><br></pre></td></tr></table></figure><p>这会暴露车主隐私。</p><p>所以真实 V2X 系统中，车辆通常不直接使用真实长期证书，而是使用多个短期的 <strong>伪名证书</strong>。</p><p>可以理解为：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">真实车辆身份：Vehicle_Real_ID_001</span><br><span class="line">伪名证书 1：PseudoCert_A</span><br><span class="line">伪名证书 2：PseudoCert_B</span><br><span class="line">伪名证书 3：PseudoCert_C</span><br></pre></td></tr></table></figure><p>对外广播时只暴露伪名证书，而不是车辆真实身份。</p><hr><h2 id="伪名证书的正常设计目标"><a href="#伪名证书的正常设计目标" class="headerlink" title="伪名证书的正常设计目标"></a>伪名证书的正常设计目标</h2><p>正常情况下，伪名证书应该做到：</p><ol><li><p>每个时间段使用不同证书；</p></li><li><p>外部观察者不能轻易把多个证书关联到同一辆车；</p></li><li><p>证书由可信 CA 或授权机构签发；</p></li><li><p>每个证书对应自己的合法签名能力；</p></li><li><p>出现恶意行为时，可以通过后台机构撤销或追踪。</p></li></ol><p>所以它既要保护隐私，又要保证安全。</p><h2 id="证书撤销机制"><a href="#证书撤销机制" class="headerlink" title="证书撤销机制"></a>证书撤销机制</h2><p>当某个车辆、设备或证书被发现异常时，管理机构会把它加入撤销列表。</p><p>类似浏览器里的 HTTPS 证书撤销，V2X 里也需要撤销恶意车辆证书。</p><p>撤销原因可能包括：</p><ul><li><p>车辆私钥泄露；</p></li><li><p>设备被攻击；</p></li><li><p>车辆发送虚假安全消息；</p></li><li><p>伪名证书异常复用；</p></li><li><p>证书过期或被吊销；</p></li><li><p>车辆行为被 Misbehavior Authority 判定异常。</p></li></ul><h2 id="Misbehavior-Authority"><a href="#Misbehavior-Authority" class="headerlink" title="Misbehavior Authority"></a>Misbehavior Authority</h2><p><strong>Misbehavior Authority</strong> 可以理解为：车联网中的异常行为管理机构。</p><p>它负责收集车辆异常行为报告，比如：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">某车辆一直广播假位置</span><br><span class="line">某车辆使用多个异常伪名证书</span><br><span class="line">某车辆签名模式异常</span><br><span class="line">某证书已经被撤销但仍然在发消息</span><br></pre></td></tr></table></figure><p>然后它可以触发：</p><ul><li><p>证书撤销；</p></li><li><p>车辆身份追踪；</p></li><li><p>黑名单下发；</p></li><li><p>后续审计。</p></li></ul><p>在实际系统中，Misbehavior Detection &#x2F; Misbehavior Authority 是 V2X 安全体系中的重要部分。</p><h1 id="TSP"><a href="#TSP" class="headerlink" title="TSP"></a>TSP</h1><p><strong>TSP &#x3D; Telematics Service Provider，车联网服务平台。</strong></p><p>可以理解为车企的“车云后台”，负责连接：</p><p>车主 App → TSP 云平台 → MQTT&#x2F;消息通道 → 车端网关 &#x2F; TCU → 车辆控制系统</p><p>TSP 常见功能包括：</p><ul><li><p>远程开锁、闭锁、寻车、鸣笛、空调控制；</p></li><li><p>车辆状态同步，例如车门、电量、位置、故障码；</p></li><li><p>OTA 升级、诊断、维修模式；</p></li><li><p>车辆身份、证书、权限、策略版本管理。</p></li></ul><hr><h2 id="Vehicle-Shadow-车辆影子"><a href="#Vehicle-Shadow-车辆影子" class="headerlink" title="Vehicle Shadow &#x2F; 车辆影子"></a>Vehicle Shadow &#x2F; 车辆影子</h2><p><strong>Shadow</strong> 可以理解为车辆在云端的一份“数字状态副本”。</p><p>比如云端保存：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;vin&quot;: &quot;LGEGF1V29PX000003&quot;,</span><br><span class="line">  &quot;version&quot;: 253,</span><br><span class="line">  &quot;maintenance_mode&quot;: false,</span><br><span class="line">  &quot;operator_scope&quot;: &quot;user&quot;,</span><br><span class="line">  &quot;remote_cmd&quot;: &quot;none&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>它表示：</p><ul><li><p>这条状态属于哪辆车；</p></li><li><p>当前影子版本是多少；</p></li><li><p>是否处于维修模式；</p></li><li><p>操作来源是普通用户还是工厂；</p></li><li><p>是否包含远程控制命令。</p></li></ul><p>车端网关收到 shadow 后，会根据内容决定是否更新本地状态，甚至执行远控命令。</p><h2 id="MQTT、QoS、Retained-Message"><a href="#MQTT、QoS、Retained-Message" class="headerlink" title="MQTT、QoS、Retained Message"></a>MQTT、QoS、Retained Message</h2><p><strong>MQTT</strong> 是车联网和物联网里常见的轻量消息协议，适合云端和设备之间发布&#x2F;订阅消息。</p><p>几个关键词：</p><ul><li><p><strong>topic</strong>：消息主题，例如 <code>geely/tsp/&lt;VIN&gt;/shadow</code>；</p></li><li><p><strong>QoS</strong>：消息投递可靠性等级；</p></li><li><p><strong>retained&#x3D;true</strong>：服务器保留最后一条消息，新客户端上线后可以直接收到。</p></li></ul><p><code>retained</code> 在车联网里很危险，因为如果最后一条 retained 消息是旧指令、维修指令、错误状态，车端重新上线时可能会再次收到。</p><p>所以 retained shadow 必须配合：</p><ul><li><p>版本号；</p></li><li><p>时间戳；</p></li><li><p>策略版本；</p></li><li><p>签名；</p></li><li><p>防重放校验。</p></li></ul><h2 id="policy-epoch-策略版本"><a href="#policy-epoch-策略版本" class="headerlink" title="policy_epoch 策略版本"></a>policy_epoch 策略版本</h2><p><code>policy_epoch</code> 可以理解为 <strong>平台策略版本号</strong>。</p><p>比如：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;policy_epoch&quot;: 20260314</span><br></pre></td></tr></table></figure><p>表示这条 shadow 消息应该按照 2026-03-14 这版平台策略来处理。</p><p>车联网系统里，策略版本常用于控制：</p><ul><li><p>哪些命令允许执行；</p></li><li><p>哪些 merge_mode 可以接受；</p></li><li><p>最低 shadow version 要求；</p></li><li><p>是否允许旧版本兼容；</p></li><li><p>是否允许维修模式指令。</p></li></ul><h2 id="merge-mode-合并模式"><a href="#merge-mode-合并模式" class="headerlink" title="merge_mode 合并模式"></a>merge_mode 合并模式</h2><p><code>merge_mode</code> 决定车端如何把云端 shadow 合并到本地状态。</p><p>题目中出现了几类：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">authoritative</span><br><span class="line">advisory_first</span><br><span class="line">legacy_any</span><br></pre></td></tr></table></figure><p>可以粗略理解为：</p><table><thead><tr><th>merge_mode</th><th>含义</th></tr></thead><tbody><tr><td>authoritative</td><td>云端状态权威覆盖本地</td></tr><tr><td>advisory_first</td><td>云端作为建议状态，可用于离线维修同步</td></tr><tr><td>legacy_any</td><td>老兼容模式，安全性较弱，应拒绝</td></tr></tbody></table><p>这类字段非常敏感，因为它影响车辆网关如何解释 payload。</p><p>如果攻击者能把一个旧 payload 放进新的 <code>merge_mode</code> 语境里，就可能让原本不该被接受的影子状态被接受。</p><h1 id="Plug-Charge"><a href="#Plug-Charge" class="headerlink" title="Plug &amp; Charge"></a>Plug &amp; Charge</h1><p><strong>Plug &amp; Charge，简称 PnC</strong>，就是电动车插上充电枪后，不需要刷卡、扫码、打开 App，车辆会自动和充电桩完成身份认证、合同认证、授权和计费。它通常和 <strong>ISO 15118</strong> 标准相关，核心目标是让 EV 与充电桩通过证书和加密通信自动完成授权。Open Charge Alliance 也把 ISO 15118 的 Plug &amp; Charge 和智能充电作为 OCPP 侧需要支持的重要功能之一。</p><p>在真实系统里，大致涉及这些角色：</p><table><thead><tr><th>角色</th><th>含义</th></tr></thead><tbody><tr><td>EV &#x2F; Vehicle</td><td>电动车</td></tr><tr><td>EVSE &#x2F; Charging Station</td><td>充电设备、充电桩</td></tr><tr><td>CPO</td><td>充电运营商，管理充电桩</td></tr><tr><td>eMSP &#x2F; MO</td><td>出行服务商 &#x2F; 合同运营方，管理用户充电合同</td></tr><tr><td>CSMS</td><td>充电站管理后台</td></tr><tr><td>V2G Root CA</td><td>车桩通信信任根</td></tr><tr><td>Contract Certificate</td><td>车辆中的充电合同证书</td></tr></tbody></table><hr><h2 id="V2G-通信与-PnC-的关系"><a href="#V2G-通信与-PnC-的关系" class="headerlink" title="V2G 通信与 PnC 的关系"></a>V2G 通信与 PnC 的关系</h2><p><strong>V2G</strong> 是 Vehicle-to-Grid，不只是“车辆向电网反向供电”，在 ISO 15118 语境里更广义地指<strong>车辆和充电基础设施之间的通信接口</strong>。ISO 的相关安全测试内容包括 TLS 握手、证书结构、证书有效性与撤销检查、Plug &amp; Charge 授权、XML 签名、端到端安全等。</p><p>也就是说，PnC 的本质是：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">自动身份认证 + 自动授权 + 自动计费 + 自动充电策略确认</span><br></pre></td></tr></table></figure><hr><h2 id="合同证书-Contract-Certificate"><a href="#合同证书-Contract-Certificate" class="headerlink" title="合同证书 Contract Certificate"></a>合同证书 Contract Certificate</h2><p><strong>Contract Certificate，合同证书</strong>。</p><p>它不是普通 TLS 网站证书，而是绑定用户充电合同、车辆、运营商关系的一种证书。车辆在 Plug &amp; Charge 过程中会出示该证书，充电桩或后台根据证书链确认这个车辆是否有合法充电合同。公开资料也通常把 Contract Certificate 描述为存储在 EV 中、用于 Plug &amp; Charge 会话中合同授权和计费的数字证书。</p><p>题目里的证书链大致是：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">V2G Root CA</span><br><span class="line">   ↓</span><br><span class="line">Mobility Operator CA</span><br><span class="line">   ↓</span><br><span class="line">EV Contract Certificate</span><br></pre></td></tr></table></figure><p>这对应真实 PnC 里的 PKI 信任体系。</p><hr><h2 id="解题层面"><a href="#解题层面" class="headerlink" title="解题层面"></a>解题层面</h2><h3 id="证书验证不等于业务授权安全"><a href="#证书验证不等于业务授权安全" class="headerlink" title="证书验证不等于业务授权安全"></a>证书验证不等于业务授权安全</h3><p>这题最重要的安全启发是：</p><blockquote><p><strong>签名验证通过，只能说明“这条旧授权记录确实来自合法合同证书”，不能说明“它在当前策略下仍然应该被允许”。</strong></p></blockquote><p>题目里充电桩能正确验证历史签名，但问题出在兼容层：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">schema v001 历史授权记录</span><br><span class="line">缺少一些新版本中的可选约束字段</span><br><span class="line">兼容层用固定默认值补齐</span><br><span class="line">默认值又被当成已授权配置</span><br></pre></td></tr></table></figure><p>这就是典型的：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">密码学验证正确</span><br><span class="line">业务安全仍然失败</span><br></pre></td></tr></table></figure><p>车联网系统里经常会出现这种问题。因为车辆、桩、云平台、运营商系统生命周期很长，新旧协议长期共存。为了兼容旧车、旧桩、旧合同，系统可能保留旧 schema、旧字段、旧签名格式、旧策略逻辑。攻击者如果能提交历史格式数据，就可能触发<strong>降级授权</strong>或<strong>策略绕过</strong>。</p><hr><h3 id="Schema-版本与兼容层风险"><a href="#Schema-版本与兼容层风险" class="headerlink" title="Schema 版本与兼容层风险"></a>Schema 版本与兼容层风险</h3><p>这题里的 <code>schema v001</code> 和 <code>contract_version</code> 非常关键。</p><p>在真实车联网里，协议和数据格式会不断升级，例如：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">v001：只签 contract_id、action、vehicle_status、v2g_state</span><br><span class="line">v003：增加 max_current_a、price_plan、authorization_scope 等字段</span><br></pre></td></tr></table></figure><p>然而，旧版本可能没有新字段。如果兼容层这样处理：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">旧记录没有 max_current_a</span><br><span class="line">→ 默认 max_current_a = 250</span><br><span class="line"></span><br><span class="line">旧记录没有 price_plan</span><br><span class="line">→ 默认 price_plan = PUBLIC_UNMETERED</span><br><span class="line"></span><br><span class="line">旧记录没有 authorization_scope</span><br><span class="line">→ 默认 authorization_scope = PnC-START-MAINTENANCE</span><br></pre></td></tr></table></figure><p>那就很危险。因为这些字段不是普通显示字段，而是<strong>安全关键字段</strong>：</p><table><thead><tr><th>字段</th><th>安全意义</th></tr></thead><tbody><tr><td>max_current_a</td><td>最大允许电流，影响充电功率和安全边界</td></tr><tr><td>price_plan</td><td>计费策略，可能影响是否免费、家用价、公共价</td></tr><tr><td>authorization_scope</td><td>授权范围，决定能不能开始充电、迁移、维护操作</td></tr><tr><td>vehicle_status</td><td>车辆状态，例如必须是停车且连接状态</td></tr><tr><td>v2g_state</td><td>V2G 会话状态，例如必须已建立会话</td></tr><tr><td>policy_epoch</td><td>策略版本 &#x2F; 生效周期</td></tr><tr><td>contract_version</td><td>合同协议版本</td></tr></tbody></table><p>所以核心安全原则是：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">凡是影响授权、额度、计费、电流、安全状态的字段，都必须被签名覆盖。</span><br></pre></td></tr></table></figure><p>不能靠默认值补出来以后直接当成“已经授权”。</p><hr><h3 id="Rollback-Downgrade-攻击"><a href="#Rollback-Downgrade-攻击" class="headerlink" title="Rollback &#x2F; Downgrade 攻击"></a>Rollback &#x2F; Downgrade 攻击</h3><p>极氪汽车plug，这题的本质可以叫：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Plug &amp; Charge Rollback Attack</span><br><span class="line">PnC 兼容层回滚攻击</span><br><span class="line">充电授权降级攻击</span><br></pre></td></tr></table></figure><p>攻击思路不是破解 ECDSA，也不是伪造证书，而是利用系统支持旧版本记录：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">新桩支持 v003</span><br><span class="line">但为了历史迁移，也接受 v001</span><br><span class="line">v001 缺少新字段</span><br><span class="line">兼容层自动填充默认值</span><br><span class="line">默认值权限过大</span><br><span class="line">于是旧授权记录被升级成了更强的新授权</span><br></pre></td></tr></table></figure><p>这类漏洞在车联网里很现实，因为车辆生命周期可能 10 年以上，充电桩、后台、App、证书系统、结算平台升级节奏不同。系统为了兼容旧数据，容易留下“历史协议入口”。</p><p>安全上要防的是：</p><figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">旧版本数据不能自动获得新版本权限</span><br><span class="line">历史授权不能跨策略周期无限复用</span><br><span class="line">缺失字段不能默认成高权限配置</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习笔记 </category>
+          
+          <category> 车联网 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 车联网 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>2026极氪全球汽车网络安全挑战赛-WP-Crypto</title>
       <link href="/2026/09/27/2026%E6%9E%81%E6%B0%AA%E5%85%A8%E7%90%83%E6%B1%BD%E8%BD%A6%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B/"/>
       <url>/2026/09/27/2026%E6%9E%81%E6%B0%AA%E5%85%A8%E7%90%83%E6%B1%BD%E8%BD%A6%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B/</url>
@@ -142,9 +169,9 @@
       
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> Crypto </tag>
+            
+            <tag> CTF </tag>
             
         </tags>
       
@@ -171,9 +198,9 @@
       
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> Crypto </tag>
+            
+            <tag> CTF </tag>
             
         </tags>
       
@@ -200,9 +227,9 @@
       
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> Crypto </tag>
+            
+            <tag> CTF </tag>
             
             <tag> 后量子密码 </tag>
             
@@ -231,9 +258,9 @@
       
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> Crypto </tag>
+            
+            <tag> CTF </tag>
             
             <tag> 侧信道 </tag>
             
@@ -351,9 +378,9 @@
       
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> Crypto </tag>
+            
+            <tag> CTF </tag>
             
         </tags>
       
@@ -438,9 +465,9 @@
       
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> Crypto </tag>
+            
+            <tag> CTF </tag>
             
         </tags>
       
@@ -467,9 +494,9 @@
       
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> Crypto </tag>
+            
+            <tag> CTF </tag>
             
             <tag> Easy </tag>
             
@@ -527,9 +554,9 @@
       
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> Crypto </tag>
+            
+            <tag> CTF </tag>
             
             <tag> WP </tag>
             
@@ -558,9 +585,9 @@
       
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> Crypto </tag>
+            
+            <tag> CTF </tag>
             
             <tag> 古典密码 </tag>
             
@@ -848,9 +875,9 @@
       
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> Crypto </tag>
+            
+            <tag> CTF </tag>
             
         </tags>
       
@@ -904,9 +931,9 @@
       
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> Crypto </tag>
+            
+            <tag> CTF </tag>
             
         </tags>
       
@@ -933,9 +960,9 @@
       
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> Crypto </tag>
+            
+            <tag> CTF </tag>
             
             <tag> WP </tag>
             
@@ -964,9 +991,9 @@
       
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> Crypto </tag>
+            
+            <tag> CTF </tag>
             
             <tag> 对称密码 </tag>
             
@@ -995,9 +1022,9 @@
       
         <tags>
             
-            <tag> CTF </tag>
-            
             <tag> Crypto </tag>
+            
+            <tag> CTF </tag>
             
         </tags>
       

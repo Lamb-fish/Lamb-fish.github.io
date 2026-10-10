@@ -1,0 +1,687 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>车联网相关知识总结 | Lamb</title><meta name="author" content="Lamb"><meta name="copyright" content="Lamb"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="近期打了一些车联网相关的比赛，总结了一下遇到的知识，对于密码学在车联网中的应用感觉主要还是ECDSA和签名证书相关。 V2XV2X 指 Vehicle-to-Everything，车与外界通信，包括：    类型 含义 例子    V2V 车与车通信 前车急刹提醒后车   V2I 车与路侧基础设施通信 红绿灯、RSU 路侧单元   V2P 车与行人通信 行人手机提醒车辆   V2N 车与云平台通信">
+<meta property="og:type" content="article">
+<meta property="og:title" content="车联网相关知识总结">
+<meta property="og:url" content="http://example.com/2026/10/04/%E8%BD%A6%E8%81%94%E7%BD%91%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Lamb">
+<meta property="og:description" content="近期打了一些车联网相关的比赛，总结了一下遇到的知识，对于密码学在车联网中的应用感觉主要还是ECDSA和签名证书相关。 V2XV2X 指 Vehicle-to-Everything，车与外界通信，包括：    类型 含义 例子    V2V 车与车通信 前车急刹提醒后车   V2I 车与路侧基础设施通信 红绿灯、RSU 路侧单元   V2P 车与行人通信 行人手机提醒车辆   V2N 车与云平台通信">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/avatar.jpg">
+<meta property="article:published_time" content="2026-10-04T12:25:07.000Z">
+<meta property="article:modified_time" content="2026-10-10T04:38:29.384Z">
+<meta property="article:author" content="Lamb">
+<meta property="article:tag" content="车联网">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/avatar.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "车联网相关知识总结",
+  "url": "http://example.com/2026/10/04/%E8%BD%A6%E8%81%94%E7%BD%91%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/",
+  "image": "http://example.com/img/avatar.jpg",
+  "datePublished": "2026-10-04T12:25:07.000Z",
+  "dateModified": "2026-10-10T04:38:29.384Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lamb",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2026/10/04/%E8%BD%A6%E8%81%94%E7%BD%91%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '车联网相关知识总结',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/entry-loading.css"><link rel="preload" as="image" href="/image/entry-bg.png"><script>try{if(sessionStorage.getItem("blog-page-transition")==="1"){document.documentElement.classList.add("page-transition");sessionStorage.removeItem("blog-page-transition")}}catch(e){}</script><script>document.addEventListener("click",function(e){if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;var a=e.target.closest&&e.target.closest("a");if(!a||a.target==="_blank"||a.hasAttribute("download"))return;var u=new URL(a.href,location.href);if(u.origin!==location.origin||(u.pathname===location.pathname&&u.search===location.search))return;try{sessionStorage.setItem("blog-page-transition","1")}catch(_){}},true)</script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&display=swap" rel="stylesheet"><script>if(window.GLOBAL_CONFIG_SITE&&GLOBAL_CONFIG_SITE.pageType==="home"){document.documentElement.classList.add("home-bg-page")}</script><link rel="stylesheet" href="/css/entry-loading.css?v=7"><link rel="stylesheet" href="/css/home-hero.css?v=5"><link rel="stylesheet" href="/css/background-scroll.css?v=5"><link rel="stylesheet" href="/css/social-qr.css?v=1"><link rel="stylesheet" href="/css/content-font.css?v=1"><link rel="stylesheet" href="/css/essays.css?v=15"><link rel="stylesheet" href="/css/music-sidebar.css?v=1"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      if ($loadingBox.classList.contains('loaded')) return
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+
+  if (document.readyState === 'complete') {
+    preloader.endLoading()
+  } else {
+    window.addEventListener('load', preloader.endLoading)
+    document.addEventListener('DOMContentLoaded', preloader.endLoading)
+    // Add timeout protection: force end after 7 seconds
+    setTimeout(preloader.endLoading, 7000)
+  }
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div class="bg-animation" id="web_bg" style="background-image: url(/image/home-cover.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">37</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">35</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/suibi/"><i class="fa-fw fa fa-feather-alt"></i><span> 随笔</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Lamb</span></a><a class="nav-page-title" href="/"><span class="site-name">车联网相关知识总结</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/suibi/"><i class="fa-fw fa fa-feather-alt"></i><span> 随笔</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">车联网相关知识总结</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-04T12:25:07.000Z" title="发表于 10月4日 20:25:07">10月4日</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-10T04:38:29.384Z" title="更新于 10月10日 12:38:29">10月10日</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%BD%A6%E8%81%94%E7%BD%91/">车联网</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>近期打了一些车联网相关的比赛，总结了一下遇到的知识，对于密码学在车联网中的应用感觉主要还是ECDSA和签名证书相关。</p>
+<h1 id="V2X"><a href="#V2X" class="headerlink" title="V2X"></a>V2X</h1><p>V2X 指 <strong>Vehicle-to-Everything，车与外界通信</strong>，包括：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V2V</td>
+<td>车与车通信</td>
+<td>前车急刹提醒后车</td>
+</tr>
+<tr>
+<td>V2I</td>
+<td>车与路侧基础设施通信</td>
+<td>红绿灯、RSU 路侧单元</td>
+</tr>
+<tr>
+<td>V2P</td>
+<td>车与行人通信</td>
+<td>行人手机提醒车辆</td>
+</tr>
+<tr>
+<td>V2N</td>
+<td>车与云平台通信</td>
+<td>交通云、车联网平台</td>
+</tr>
+</tbody></table>
+<p>这道题主要模拟的是 <strong>V2X 广播安全消息</strong> 场景，也就是车辆不断广播自己的状态信息，例如位置、速度、方向、刹车状态等。</p>
+<hr>
+<h2 id="BSM-报文"><a href="#BSM-报文" class="headerlink" title="BSM 报文"></a>BSM 报文</h2><p>BSM 通常指 <strong>Basic Safety Message，基础安全消息</strong>。可以理解成车辆周期性发出的“我是谁、我在哪、我速度多少、我接下来可能怎么动”的广播数据。</p>
+<p>真实车联网里，BSM 这类消息常用于：</p>
+<ul>
+<li><p>防碰撞预警；</p>
+</li>
+<li><p>盲区提醒；</p>
+</li>
+<li><p>交叉路口预警；</p>
+</li>
+<li><p>紧急制动提醒；</p>
+</li>
+<li><p>编队行驶；</p>
+</li>
+<li><p>自动驾驶协同感知。</p>
+</li>
+</ul>
+<p>但是因为这些消息会影响车辆安全，所以不能随便伪造，必须带有 <strong>数字签名</strong>。</p>
+<hr>
+<h2 id="V2X-报文签名"><a href="#V2X-报文签名" class="headerlink" title="V2X 报文签名"></a>V2X 报文签名</h2><p>车联网广播是开放环境，任何设备理论上都可能监听或发送数据。</p>
+<p>如果没有签名，攻击者可以伪造：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">前方有事故</span><br><span class="line">我是一辆急救车</span><br><span class="line">我正在紧急刹车</span><br><span class="line">我在你的左侧高速靠近</span><br></pre></td></tr></table></figure>
+
+<p>车辆如果相信这些假消息，可能会做出错误决策。</p>
+<p>所以 V2X 报文一般要满足：</p>
+<table>
+<thead>
+<tr>
+<th>安全目标</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>身份可信</td>
+<td>确认消息来自合法车辆</td>
+</tr>
+<tr>
+<td>消息完整</td>
+<td>确认内容没有被篡改</td>
+</tr>
+<tr>
+<td>不可抵赖</td>
+<td>事后可以追溯行为</td>
+</tr>
+<tr>
+<td>隐私保护</td>
+<td>不能长期暴露真实车辆身份</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="伪名证书"><a href="#伪名证书" class="headerlink" title="伪名证书"></a>伪名证书</h2><p>题里有 <code>pseudonym_bundle.pem</code>，也就是 <strong>伪名证书包</strong>。</p>
+<p>车联网不能让车辆一直用真实身份广播，否则别人可以长期跟踪这辆车：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">车 A 每天早上 8 点从某小区出发</span><br><span class="line">晚上 6 点回到同一个位置</span><br></pre></td></tr></table></figure>
+
+<p>这会暴露车主隐私。</p>
+<p>所以真实 V2X 系统中，车辆通常不直接使用真实长期证书，而是使用多个短期的 <strong>伪名证书</strong>。</p>
+<p>可以理解为：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">真实车辆身份：Vehicle_Real_ID_001</span><br><span class="line">伪名证书 1：PseudoCert_A</span><br><span class="line">伪名证书 2：PseudoCert_B</span><br><span class="line">伪名证书 3：PseudoCert_C</span><br></pre></td></tr></table></figure>
+
+<p>对外广播时只暴露伪名证书，而不是车辆真实身份。</p>
+<hr>
+<h2 id="伪名证书的正常设计目标"><a href="#伪名证书的正常设计目标" class="headerlink" title="伪名证书的正常设计目标"></a>伪名证书的正常设计目标</h2><p>正常情况下，伪名证书应该做到：</p>
+<ol>
+<li><p>每个时间段使用不同证书；</p>
+</li>
+<li><p>外部观察者不能轻易把多个证书关联到同一辆车；</p>
+</li>
+<li><p>证书由可信 CA 或授权机构签发；</p>
+</li>
+<li><p>每个证书对应自己的合法签名能力；</p>
+</li>
+<li><p>出现恶意行为时，可以通过后台机构撤销或追踪。</p>
+</li>
+</ol>
+<p>所以它既要保护隐私，又要保证安全。</p>
+<h2 id="证书撤销机制"><a href="#证书撤销机制" class="headerlink" title="证书撤销机制"></a>证书撤销机制</h2><p>当某个车辆、设备或证书被发现异常时，管理机构会把它加入撤销列表。</p>
+<p>类似浏览器里的 HTTPS 证书撤销，V2X 里也需要撤销恶意车辆证书。</p>
+<p>撤销原因可能包括：</p>
+<ul>
+<li><p>车辆私钥泄露；</p>
+</li>
+<li><p>设备被攻击；</p>
+</li>
+<li><p>车辆发送虚假安全消息；</p>
+</li>
+<li><p>伪名证书异常复用；</p>
+</li>
+<li><p>证书过期或被吊销；</p>
+</li>
+<li><p>车辆行为被 Misbehavior Authority 判定异常。</p>
+</li>
+</ul>
+<h2 id="Misbehavior-Authority"><a href="#Misbehavior-Authority" class="headerlink" title="Misbehavior Authority"></a>Misbehavior Authority</h2><p><strong>Misbehavior Authority</strong> 可以理解为：车联网中的异常行为管理机构。</p>
+<p>它负责收集车辆异常行为报告，比如：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">某车辆一直广播假位置</span><br><span class="line">某车辆使用多个异常伪名证书</span><br><span class="line">某车辆签名模式异常</span><br><span class="line">某证书已经被撤销但仍然在发消息</span><br></pre></td></tr></table></figure>
+
+<p>然后它可以触发：</p>
+<ul>
+<li><p>证书撤销；</p>
+</li>
+<li><p>车辆身份追踪；</p>
+</li>
+<li><p>黑名单下发；</p>
+</li>
+<li><p>后续审计。</p>
+</li>
+</ul>
+<p>在实际系统中，Misbehavior Detection &#x2F; Misbehavior Authority 是 V2X 安全体系中的重要部分。</p>
+<h1 id="TSP"><a href="#TSP" class="headerlink" title="TSP"></a>TSP</h1><p><strong>TSP &#x3D; Telematics Service Provider，车联网服务平台。</strong></p>
+<p>可以理解为车企的“车云后台”，负责连接：</p>
+<p>车主 App → TSP 云平台 → MQTT&#x2F;消息通道 → 车端网关 &#x2F; TCU → 车辆控制系统</p>
+<p>TSP 常见功能包括：</p>
+<ul>
+<li><p>远程开锁、闭锁、寻车、鸣笛、空调控制；</p>
+</li>
+<li><p>车辆状态同步，例如车门、电量、位置、故障码；</p>
+</li>
+<li><p>OTA 升级、诊断、维修模式；</p>
+</li>
+<li><p>车辆身份、证书、权限、策略版本管理。</p>
+</li>
+</ul>
+<hr>
+<h2 id="Vehicle-Shadow-车辆影子"><a href="#Vehicle-Shadow-车辆影子" class="headerlink" title="Vehicle Shadow &#x2F; 车辆影子"></a>Vehicle Shadow &#x2F; 车辆影子</h2><p><strong>Shadow</strong> 可以理解为车辆在云端的一份“数字状态副本”。</p>
+<p>比如云端保存：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;vin&quot;: &quot;LGEGF1V29PX000003&quot;,</span><br><span class="line">  &quot;version&quot;: 253,</span><br><span class="line">  &quot;maintenance_mode&quot;: false,</span><br><span class="line">  &quot;operator_scope&quot;: &quot;user&quot;,</span><br><span class="line">  &quot;remote_cmd&quot;: &quot;none&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>它表示：</p>
+<ul>
+<li><p>这条状态属于哪辆车；</p>
+</li>
+<li><p>当前影子版本是多少；</p>
+</li>
+<li><p>是否处于维修模式；</p>
+</li>
+<li><p>操作来源是普通用户还是工厂；</p>
+</li>
+<li><p>是否包含远程控制命令。</p>
+</li>
+</ul>
+<p>车端网关收到 shadow 后，会根据内容决定是否更新本地状态，甚至执行远控命令。</p>
+<h2 id="MQTT、QoS、Retained-Message"><a href="#MQTT、QoS、Retained-Message" class="headerlink" title="MQTT、QoS、Retained Message"></a>MQTT、QoS、Retained Message</h2><p><strong>MQTT</strong> 是车联网和物联网里常见的轻量消息协议，适合云端和设备之间发布&#x2F;订阅消息。</p>
+<p>几个关键词：</p>
+<ul>
+<li><p><strong>topic</strong>：消息主题，例如 <code>geely/tsp/&lt;VIN&gt;/shadow</code>；</p>
+</li>
+<li><p><strong>QoS</strong>：消息投递可靠性等级；</p>
+</li>
+<li><p><strong>retained&#x3D;true</strong>：服务器保留最后一条消息，新客户端上线后可以直接收到。</p>
+</li>
+</ul>
+<p><code>retained</code> 在车联网里很危险，因为如果最后一条 retained 消息是旧指令、维修指令、错误状态，车端重新上线时可能会再次收到。</p>
+<p>所以 retained shadow 必须配合：</p>
+<ul>
+<li><p>版本号；</p>
+</li>
+<li><p>时间戳；</p>
+</li>
+<li><p>策略版本；</p>
+</li>
+<li><p>签名；</p>
+</li>
+<li><p>防重放校验。</p>
+</li>
+</ul>
+<h2 id="policy-epoch-策略版本"><a href="#policy-epoch-策略版本" class="headerlink" title="policy_epoch 策略版本"></a>policy_epoch 策略版本</h2><p><code>policy_epoch</code> 可以理解为 <strong>平台策略版本号</strong>。</p>
+<p>比如：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;policy_epoch&quot;: 20260314</span><br></pre></td></tr></table></figure>
+
+<p>表示这条 shadow 消息应该按照 2026-03-14 这版平台策略来处理。</p>
+<p>车联网系统里，策略版本常用于控制：</p>
+<ul>
+<li><p>哪些命令允许执行；</p>
+</li>
+<li><p>哪些 merge_mode 可以接受；</p>
+</li>
+<li><p>最低 shadow version 要求；</p>
+</li>
+<li><p>是否允许旧版本兼容；</p>
+</li>
+<li><p>是否允许维修模式指令。</p>
+</li>
+</ul>
+<h2 id="merge-mode-合并模式"><a href="#merge-mode-合并模式" class="headerlink" title="merge_mode 合并模式"></a>merge_mode 合并模式</h2><p><code>merge_mode</code> 决定车端如何把云端 shadow 合并到本地状态。</p>
+<p>题目中出现了几类：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">authoritative</span><br><span class="line">advisory_first</span><br><span class="line">legacy_any</span><br></pre></td></tr></table></figure>
+
+<p>可以粗略理解为：</p>
+<table>
+<thead>
+<tr>
+<th>merge_mode</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>authoritative</td>
+<td>云端状态权威覆盖本地</td>
+</tr>
+<tr>
+<td>advisory_first</td>
+<td>云端作为建议状态，可用于离线维修同步</td>
+</tr>
+<tr>
+<td>legacy_any</td>
+<td>老兼容模式，安全性较弱，应拒绝</td>
+</tr>
+</tbody></table>
+<p>这类字段非常敏感，因为它影响车辆网关如何解释 payload。</p>
+<p>如果攻击者能把一个旧 payload 放进新的 <code>merge_mode</code> 语境里，就可能让原本不该被接受的影子状态被接受。</p>
+<h1 id="Plug-Charge"><a href="#Plug-Charge" class="headerlink" title="Plug &amp; Charge"></a>Plug &amp; Charge</h1><p><strong>Plug &amp; Charge，简称 PnC</strong>，就是电动车插上充电枪后，不需要刷卡、扫码、打开 App，车辆会自动和充电桩完成身份认证、合同认证、授权和计费。它通常和 <strong>ISO 15118</strong> 标准相关，核心目标是让 EV 与充电桩通过证书和加密通信自动完成授权。Open Charge Alliance 也把 ISO 15118 的 Plug &amp; Charge 和智能充电作为 OCPP 侧需要支持的重要功能之一。</p>
+<p>在真实系统里，大致涉及这些角色：</p>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>EV &#x2F; Vehicle</td>
+<td>电动车</td>
+</tr>
+<tr>
+<td>EVSE &#x2F; Charging Station</td>
+<td>充电设备、充电桩</td>
+</tr>
+<tr>
+<td>CPO</td>
+<td>充电运营商，管理充电桩</td>
+</tr>
+<tr>
+<td>eMSP &#x2F; MO</td>
+<td>出行服务商 &#x2F; 合同运营方，管理用户充电合同</td>
+</tr>
+<tr>
+<td>CSMS</td>
+<td>充电站管理后台</td>
+</tr>
+<tr>
+<td>V2G Root CA</td>
+<td>车桩通信信任根</td>
+</tr>
+<tr>
+<td>Contract Certificate</td>
+<td>车辆中的充电合同证书</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="V2G-通信与-PnC-的关系"><a href="#V2G-通信与-PnC-的关系" class="headerlink" title="V2G 通信与 PnC 的关系"></a>V2G 通信与 PnC 的关系</h2><p><strong>V2G</strong> 是 Vehicle-to-Grid，不只是“车辆向电网反向供电”，在 ISO 15118 语境里更广义地指<strong>车辆和充电基础设施之间的通信接口</strong>。ISO 的相关安全测试内容包括 TLS 握手、证书结构、证书有效性与撤销检查、Plug &amp; Charge 授权、XML 签名、端到端安全等。</p>
+<p>也就是说，PnC 的本质是：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">自动身份认证 + 自动授权 + 自动计费 + 自动充电策略确认</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="合同证书-Contract-Certificate"><a href="#合同证书-Contract-Certificate" class="headerlink" title="合同证书 Contract Certificate"></a>合同证书 Contract Certificate</h2><p><strong>Contract Certificate，合同证书</strong>。</p>
+<p>它不是普通 TLS 网站证书，而是绑定用户充电合同、车辆、运营商关系的一种证书。车辆在 Plug &amp; Charge 过程中会出示该证书，充电桩或后台根据证书链确认这个车辆是否有合法充电合同。公开资料也通常把 Contract Certificate 描述为存储在 EV 中、用于 Plug &amp; Charge 会话中合同授权和计费的数字证书。</p>
+<p>题目里的证书链大致是：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">V2G Root CA</span><br><span class="line">   ↓</span><br><span class="line">Mobility Operator CA</span><br><span class="line">   ↓</span><br><span class="line">EV Contract Certificate</span><br></pre></td></tr></table></figure>
+
+<p>这对应真实 PnC 里的 PKI 信任体系。</p>
+<hr>
+<h2 id="解题层面"><a href="#解题层面" class="headerlink" title="解题层面"></a>解题层面</h2><h3 id="证书验证不等于业务授权安全"><a href="#证书验证不等于业务授权安全" class="headerlink" title="证书验证不等于业务授权安全"></a>证书验证不等于业务授权安全</h3><p>这题最重要的安全启发是：</p>
+<blockquote>
+<p><strong>签名验证通过，只能说明“这条旧授权记录确实来自合法合同证书”，不能说明“它在当前策略下仍然应该被允许”。</strong></p>
+</blockquote>
+<p>题目里充电桩能正确验证历史签名，但问题出在兼容层：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">schema v001 历史授权记录</span><br><span class="line">缺少一些新版本中的可选约束字段</span><br><span class="line">兼容层用固定默认值补齐</span><br><span class="line">默认值又被当成已授权配置</span><br></pre></td></tr></table></figure>
+
+<p>这就是典型的：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">密码学验证正确</span><br><span class="line">业务安全仍然失败</span><br></pre></td></tr></table></figure>
+
+<p>车联网系统里经常会出现这种问题。因为车辆、桩、云平台、运营商系统生命周期很长，新旧协议长期共存。为了兼容旧车、旧桩、旧合同，系统可能保留旧 schema、旧字段、旧签名格式、旧策略逻辑。攻击者如果能提交历史格式数据，就可能触发<strong>降级授权</strong>或<strong>策略绕过</strong>。</p>
+<hr>
+<h3 id="Schema-版本与兼容层风险"><a href="#Schema-版本与兼容层风险" class="headerlink" title="Schema 版本与兼容层风险"></a>Schema 版本与兼容层风险</h3><p>这题里的 <code>schema v001</code> 和 <code>contract_version</code> 非常关键。</p>
+<p>在真实车联网里，协议和数据格式会不断升级，例如：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">v001：只签 contract_id、action、vehicle_status、v2g_state</span><br><span class="line">v003：增加 max_current_a、price_plan、authorization_scope 等字段</span><br></pre></td></tr></table></figure>
+
+<p>然而，旧版本可能没有新字段。如果兼容层这样处理：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">旧记录没有 max_current_a</span><br><span class="line">→ 默认 max_current_a = 250</span><br><span class="line"></span><br><span class="line">旧记录没有 price_plan</span><br><span class="line">→ 默认 price_plan = PUBLIC_UNMETERED</span><br><span class="line"></span><br><span class="line">旧记录没有 authorization_scope</span><br><span class="line">→ 默认 authorization_scope = PnC-START-MAINTENANCE</span><br></pre></td></tr></table></figure>
+
+<p>那就很危险。因为这些字段不是普通显示字段，而是<strong>安全关键字段</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>安全意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>max_current_a</td>
+<td>最大允许电流，影响充电功率和安全边界</td>
+</tr>
+<tr>
+<td>price_plan</td>
+<td>计费策略，可能影响是否免费、家用价、公共价</td>
+</tr>
+<tr>
+<td>authorization_scope</td>
+<td>授权范围，决定能不能开始充电、迁移、维护操作</td>
+</tr>
+<tr>
+<td>vehicle_status</td>
+<td>车辆状态，例如必须是停车且连接状态</td>
+</tr>
+<tr>
+<td>v2g_state</td>
+<td>V2G 会话状态，例如必须已建立会话</td>
+</tr>
+<tr>
+<td>policy_epoch</td>
+<td>策略版本 &#x2F; 生效周期</td>
+</tr>
+<tr>
+<td>contract_version</td>
+<td>合同协议版本</td>
+</tr>
+</tbody></table>
+<p>所以核心安全原则是：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">凡是影响授权、额度、计费、电流、安全状态的字段，都必须被签名覆盖。</span><br></pre></td></tr></table></figure>
+
+<p>不能靠默认值补出来以后直接当成“已经授权”。</p>
+<hr>
+<h3 id="Rollback-Downgrade-攻击"><a href="#Rollback-Downgrade-攻击" class="headerlink" title="Rollback &#x2F; Downgrade 攻击"></a>Rollback &#x2F; Downgrade 攻击</h3><p>极氪汽车plug，这题的本质可以叫：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Plug &amp; Charge Rollback Attack</span><br><span class="line">PnC 兼容层回滚攻击</span><br><span class="line">充电授权降级攻击</span><br></pre></td></tr></table></figure>
+
+<p>攻击思路不是破解 ECDSA，也不是伪造证书，而是利用系统支持旧版本记录：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">新桩支持 v003</span><br><span class="line">但为了历史迁移，也接受 v001</span><br><span class="line">v001 缺少新字段</span><br><span class="line">兼容层自动填充默认值</span><br><span class="line">默认值权限过大</span><br><span class="line">于是旧授权记录被升级成了更强的新授权</span><br></pre></td></tr></table></figure>
+
+<p>这类漏洞在车联网里很现实，因为车辆生命周期可能 10 年以上，充电桩、后台、App、证书系统、结算平台升级节奏不同。系统为了兼容旧数据，容易留下“历史协议入口”。</p>
+<p>安全上要防的是：</p>
+<figure class="highlight plaintext"><figcaption><span>Text</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">旧版本数据不能自动获得新版本权限</span><br><span class="line">历史授权不能跨策略周期无限复用</span><br><span class="line">缺失字段不能默认成高权限配置</span><br></pre></td></tr></table></figure>
+
+
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Lamb</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2026/10/04/%E8%BD%A6%E8%81%94%E7%BD%91%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/">http://example.com/2026/10/04/%E8%BD%A6%E8%81%94%E7%BD%91%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Lamb</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%BD%A6%E8%81%94%E7%BD%91/">车联网</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/09/27/2026%E6%9E%81%E6%B0%AA%E5%85%A8%E7%90%83%E6%B1%BD%E8%BD%A6%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B/" title="2026极氪全球汽车网络安全挑战赛-WP-Crypto"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">2026极氪全球汽车网络安全挑战赛-WP-Crypto</div></div><div class="info-2"><div class="info-item-1">V2X Shadow Certificate题目车联网安全平台在一小段时间内收到了多个 BSM 记录。三张伪名证书表面上属于不同车辆身份，其中两张已经被 Misbehavior Authority 挂起。但撤销公告下发前，网关的证书缓存仍允许旧记录通过。flag 格式 GEELY{V2X_...........}安全运营团队怀疑存在同一把签名私钥被映射到多个伪名证书的情况。现在只有捕获到的原始签名报文、证书包和撤销时间窗。 题目附件： 1234567891011121314151617V2X Shadow Certificate.zip│├── evidence│   ├── v2x_session.jsonl│   │   └── 捕获的原始 V2X BSM 签名报文│   ││   └── revocation_schedule.txt│       └── Misbehavior Authority 撤销时间窗口记录├── pki│   ├── ca_cert.pem│   │   └── 根 CA 证书，用于证书链验证及哈希计算│   ││   └── pseudonym...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/09/27/2026%E6%9E%81%E6%B0%AA%E5%85%A8%E7%90%83%E6%B1%BD%E8%BD%A6%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B/" title="2026极氪全球汽车网络安全挑战赛-WP-Crypto"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 9月27日</div><div class="info-item-2">2026极氪全球汽车网络安全挑战赛-WP-Crypto</div></div><div class="info-2"><div class="info-item-1">V2X Shadow Certificate题目车联网安全平台在一小段时间内收到了多个 BSM 记录。三张伪名证书表面上属于不同车辆身份，其中两张已经被 Misbehavior Authority 挂起。但撤销公告下发前，网关的证书缓存仍允许旧记录通过。flag 格式 GEELY{V2X_...........}安全运营团队怀疑存在同一把签名私钥被映射到多个伪名证书的情况。现在只有捕获到的原始签名报文、证书包和撤销时间窗。 题目附件： 1234567891011121314151617V2X Shadow Certificate.zip│├── evidence│   ├── v2x_session.jsonl│   │   └── 捕获的原始 V2X BSM 签名报文│   ││   └── revocation_schedule.txt│       └── Misbehavior Authority 撤销时间窗口记录├── pki│   ├── ca_cert.pem│   │   └── 根 CA 证书，用于证书链验证及哈希计算│   ││   └── pseudonym...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lamb</div><div class="author-info-description">Nothing but yourself</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">37</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">35</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Lamb-fish/Lamb-fish.github.io" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:lilili1l1lilili@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="#" target="_blank" title="WeChat"><i class="fab fa-weixin"></i></a><a class="social-icon" href="#" target="_blank" title="QQ"><i class="fab fa-qq"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#V2X"><span class="toc-number">1.</span> <span class="toc-text">V2X</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#BSM-%E6%8A%A5%E6%96%87"><span class="toc-number">1.1.</span> <span class="toc-text">BSM 报文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#V2X-%E6%8A%A5%E6%96%87%E7%AD%BE%E5%90%8D"><span class="toc-number">1.2.</span> <span class="toc-text">V2X 报文签名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E5%90%8D%E8%AF%81%E4%B9%A6"><span class="toc-number">1.3.</span> <span class="toc-text">伪名证书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E5%90%8D%E8%AF%81%E4%B9%A6%E7%9A%84%E6%AD%A3%E5%B8%B8%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="toc-number">1.4.</span> <span class="toc-text">伪名证书的正常设计目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E6%92%A4%E9%94%80%E6%9C%BA%E5%88%B6"><span class="toc-number">1.5.</span> <span class="toc-text">证书撤销机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Misbehavior-Authority"><span class="toc-number">1.6.</span> <span class="toc-text">Misbehavior Authority</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TSP"><span class="toc-number">2.</span> <span class="toc-text">TSP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Vehicle-Shadow-%E8%BD%A6%E8%BE%86%E5%BD%B1%E5%AD%90"><span class="toc-number">2.1.</span> <span class="toc-text">Vehicle Shadow &#x2F; 车辆影子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MQTT%E3%80%81QoS%E3%80%81Retained-Message"><span class="toc-number">2.2.</span> <span class="toc-text">MQTT、QoS、Retained Message</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#policy-epoch-%E7%AD%96%E7%95%A5%E7%89%88%E6%9C%AC"><span class="toc-number">2.3.</span> <span class="toc-text">policy_epoch 策略版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#merge-mode-%E5%90%88%E5%B9%B6%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.4.</span> <span class="toc-text">merge_mode 合并模式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Plug-Charge"><span class="toc-number">3.</span> <span class="toc-text">Plug &amp; Charge</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#V2G-%E9%80%9A%E4%BF%A1%E4%B8%8E-PnC-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">3.1.</span> <span class="toc-text">V2G 通信与 PnC 的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%88%E5%90%8C%E8%AF%81%E4%B9%A6-Contract-Certificate"><span class="toc-number">3.2.</span> <span class="toc-text">合同证书 Contract Certificate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E5%B1%82%E9%9D%A2"><span class="toc-number">3.3.</span> <span class="toc-text">解题层面</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E9%AA%8C%E8%AF%81%E4%B8%8D%E7%AD%89%E4%BA%8E%E4%B8%9A%E5%8A%A1%E6%8E%88%E6%9D%83%E5%AE%89%E5%85%A8"><span class="toc-number">3.3.1.</span> <span class="toc-text">证书验证不等于业务授权安全</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Schema-%E7%89%88%E6%9C%AC%E4%B8%8E%E5%85%BC%E5%AE%B9%E5%B1%82%E9%A3%8E%E9%99%A9"><span class="toc-number">3.3.2.</span> <span class="toc-text">Schema 版本与兼容层风险</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Rollback-Downgrade-%E6%94%BB%E5%87%BB"><span class="toc-number">3.3.3.</span> <span class="toc-text">Rollback &#x2F; Downgrade 攻击</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/10/04/%E8%BD%A6%E8%81%94%E7%BD%91%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93/" title="车联网相关知识总结">车联网相关知识总结</a><time datetime="2026-10-04T12:25:07.000Z" title="发表于 10月4日 20:25:07">10月4日</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/27/2026%E6%9E%81%E6%B0%AA%E5%85%A8%E7%90%83%E6%B1%BD%E8%BD%A6%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B/" title="2026极氪全球汽车网络安全挑战赛-WP-Crypto">2026极氪全球汽车网络安全挑战赛-WP-Crypto</a><time datetime="2026-09-27T15:25:07.000Z" title="发表于 9月27日 23:25:07">9月27日</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/21/EUDI%20%E5%85%A5%E9%97%A8%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%BA%86%E8%A7%A3/" title="零知识证明学习笔记-EUDI 入门概念整理">零知识证明学习笔记-EUDI 入门概念整理</a><time datetime="2026-09-20T16:15:07.000Z" title="发表于 9月21日 00:15:07">9月21日</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/14/%E5%9F%BA%E4%BA%8E%E6%A0%BC%E7%9A%84%E5%90%8E%E9%87%8F%E5%AD%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%88%9D%E6%8E%A2LWE%E3%80%81RLWE%E3%80%81MLWE/" title="基于格的后量子学习笔记——初探LWE、RLWE、MLWE">基于格的后量子学习笔记——初探LWE、RLWE、MLWE</a><time datetime="2026-09-14T15:25:07.000Z" title="发表于 9月14日 23:25:07">9月14日</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/09/13/%E5%87%BA%E9%A2%98%E5%B0%8F%E8%AE%B0%20HDCTF-rainbow%20sour/" title="出题小记 HDCTF-Rainbow sour">出题小记 HDCTF-Rainbow sour</a><time datetime="2026-09-13T12:25:07.000Z" title="发表于 9月13日 20:25:07">9月13日</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Lamb</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'ams',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = {"data-category":"Announcements","data-mapping":"pathname","data-strict":"0","data-reactions-enabled":"1","data-emit-metadata":"0","data-input-position":"bottom","data-lang":"zh-CN"}
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'Lamb-fish/Lamb-fish.github.io',
+      'data-repo-id': 'R_kgDOQNUguw',
+      'data-category-id': 'DIC_kwDOQNUgu84DHEqy',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script><script src="/js/fall-down.js?v=7"></script><script src="/js/home-hero.js?v=4"></script><script src="/js/background-scroll.js?v=5"></script><script src="/js/social-qr.js?v=1"></script><script src="/js/essays.js?v=3"></script><script src="/js/music-sidebar.js?v=2"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="https://busuanzi.hee.ink/busuanzi.pure.mini.js"></script></div></body></html>
