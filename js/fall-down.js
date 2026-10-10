@@ -175,6 +175,32 @@
     }, 2600);
   }
 
+  // 浏览器回退可能从 BFCache 恢复离开前的 DOM 状态，此时不会重新触发 load。
+  // 清理离开页面时显示的遮罩，避免恢复后页面一直被加载层挡住。
+  window.addEventListener("pageshow", (event) => {
+    if (!event.persisted) return;
+
+    clearTimeout(transitionTimer);
+    document.body.classList.remove("page-transition");
+    document.documentElement.classList.remove("page-transition");
+    document.body.style.overflow = "";
+
+    const loadingBox = document.querySelector("#loading-box");
+    if (loadingBox) {
+      loadingBox.classList.remove("pjax-transition");
+      loadingBox.classList.add("loaded");
+      loadingBox.style.removeProperty("opacity");
+      loadingBox.style.removeProperty("visibility");
+      loadingBox.style.removeProperty("pointer-events");
+    }
+
+    try {
+      sessionStorage.removeItem("blog-page-transition");
+    } catch (error) {}
+
+    transitionActive = false;
+  });
+
   document.addEventListener("pjax:send", startPageTransition);
   document.addEventListener("pjax:complete", endPageTransition);
 
